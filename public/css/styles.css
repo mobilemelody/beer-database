@@ -1,0 +1,30 @@
+/* General */
+.container.content {
+  padding-bottom: 50px;
+}
+
+/* Homepage */
+.home-img {
+	background: url('../images/beer.jpg') no-repeat;
+	background-size: cover;
+	height: 85vh;
+  margin-bottom: 0;
+}
+
+.homepage-search-form{
+	padding-top: 25vh;
+}
+
+/* Beer page */
+.beer-rating {
+  font-size: 200%;
+}
+
+.review-user {
+  font-size: 125%;
+  font-weight: bold;
+}
+
+.user-rating {
+  font-size: 150%;
+}

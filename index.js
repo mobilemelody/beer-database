@@ -25,7 +25,9 @@ app.get('/beers/add',function(req,res,next) {
 });
 
 app.get('/beers/:id',function(req,res,next) {
-  res.render('beer');
+  let context = {};
+  context.id = req.params.id;
+  res.render('beers', context);
 });
 
 app.get('/beers/:id/reviews/add',function(req,res,next) {
@@ -36,8 +38,31 @@ app.get('/breweries',function(req,res,next) {
   res.render('breweries');
 });
 
+app.get('/breweries/:id',function(req,res,next) {
+  let context = {};
+  context.id = req.params.id;
+  res.render('breweries', context);
+});
+
+
 app.get('/venues',function(req,res,next) {
   res.render('venues');
+});
+
+app.get('/venues/:id',function(req,res,next) {
+  let context = {};
+  context.id = req.params.id;
+  res.render('venues', context);
+});
+
+app.get('/users',function(req,res,next) {
+  res.render('users');
+});
+
+app.get('/users/:id',function(req,res,next) {
+  let context = {};
+  context.id = req.params.id;
+  res.render('users', context);
 });
 
 app.use(function(req,res){

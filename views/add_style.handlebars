@@ -1,0 +1,36 @@
+<div class="container content pt-3">
+	<h1 class="display-4">
+		{{#if id}}Update <a href="/styles/id">Style name</a>
+		{{else}}Add a style{{/if}}
+	</h1>
+	<form>
+		<div class="form-row">
+			<div class="form-group col-md-6">
+				<label for="name">Style name</label>
+					<input type="text" class="form-control" id="name" value="{{name}}">
+			</div>
+			<div class="form-group col-md-3">
+				<label for="abv">ABV range</label>
+					<input type="text" class="form-control" id="abv" placeholder="(ex. 3.0% - 5.0%)" value="{{abv}}">
+			</div>
+			<div class="form-group col-md-3">
+				<label for="abv">IBU range</label>
+					<input type="text" class="form-control" id="abv" placeholder="(ex. 30 - 50)" value="{{ibu}}">
+			</div>
+		</div>
+		<div class="form-row">
+			<div class="form-group col-12">
+				<label for="comments">Description</label>
+				<textarea class="form-control" id="comments" rows="3" maxlength="300">{{description}}</textarea>
+			</div>
+		</div>
+		<div class="form-row">
+			<div class="form-group col-12">
+			<button type="submit" class="btn btn-primary">
+				{{#if id}}Update style
+				{{else}}Add style{{/if}}
+			</button>
+			</div>
+		</div>
+	</form>
+</div>

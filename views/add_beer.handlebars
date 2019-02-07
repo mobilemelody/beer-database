@@ -1,29 +1,32 @@
 <div class="container content pt-3">
-	<h1 class="display-4">Add a beer</h1>
+	<h1 class="display-4">
+		{{#if id}}Edit <a href="/beers/id">Beer name</a>
+		{{else}}Add a beer{{/if}}
+	</h1>
 	<form>
 		<div class="form-row">
 			<div class="form-group col-lg-6">
 				<label for="beerName">Beer name</label>
-				<input type="text" class="form-control" id="beerName">
+				<input type="text" class="form-control" id="beerName" value="{{name}}" required>
 			</div>
 			<div class="form-group col-lg-6">
 				<label for="brewery">Brewery</label>
-				<select class="form-control brewery-select">
-					<option>Choose one</option>
+				<select class="form-control brewery-select" required>
+					<option value="">Choose one</option>
 				</select>
 			</div>
 		</div>
 		<div class="form-row">
 			<div class="form-group col-lg-6">
 				<label for="style">Style</label>
-				<select class="form-control style-select">
-					<option>Choose one</option>
+				<select class="form-control style-select" required>
+					<option value="">Choose one</option>
 				</select>
 			</div>
 			<div class="form-group col-lg-3 col-sm-6">
 				<label for="abv">ABV</label>
 				<div class="input-group">
-					<input type="number" class="form-control" id="abv">
+					<input type="number" step="0.1" min="0" class="form-control" id="abv" value="{{abv}}">
 					<div class="input-group-append">
 						<div class="input-group-text">%</div>
 					</div>
@@ -31,12 +34,15 @@
 			</div>
 			<div class="form-group col-lg-3 col-sm-6">
 				<label for="ibu">IBU</label>
-				<input type="number" class="form-control" id="ibu">
+				<input type="number" class="form-control" id="ibu" value="{{ibu}}">
 			</div>
 		</div>
 		<div class="form-row">
 			<div class="form-group col-md-12">
-			<button type="submit" class="btn btn-primary">Add beer</button>
+			<button type="submit" class="btn btn-primary">
+				{{#if id}}Update beer
+				{{else}}Add beer{{/if}}
+			</button>
 			</div>
 		</div>
 	</form>

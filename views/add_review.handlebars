@@ -1,4 +1,44 @@
 <div class="container content pt-3">
-	<div class="alert alert-secondary mt-3" role="alert">Form to add review for beer</div>
-	<h1 class="display-4">Add a review</h1>
+	<h1 class="display-4">Add a review for <a href="/beers/id">Beer name</a></h1>
+	<form>
+		<div class="form-row">
+			<div class="form-group col-md-6">
+				<label for="user">User</label>
+					<select class="form-control" id="user">
+						<option>Anonymous</option>
+					</select>
+			</div>
+			<div class="form-group col-md-6">
+				<label for="date">Date</label>
+				<input type="date" class="form-control" id="date">
+			</div>
+		</div>
+		<div class="form-row">
+			<div class="form-group col-md-3">
+				<label>Rating</label>
+				<div class="clearfix"></div>
+				<fieldset class="rating">
+					<input type="radio" id="rating-5" name="rating" value="5">
+					<label for="rating-5" class="rating-star"><i class="fas fa-star"></i></label>
+					<input type="radio" id="rating-4" name="rating" value="4">
+					<label for="rating-4" class="rating-star"><i class="fas fa-star"></i></label>
+					<input type="radio" id="rating-3" name="rating" value="3">
+					<label for="rating-3" class="rating-star"><i class="fas fa-star"></i></label>
+					<input type="radio" id="rating-2" name="rating" value="2">
+					<label for="rating-2" class="rating-star"><i class="fas fa-star"></i></label>
+					<input type="radio" id="rating-1" name="rating" value="1">
+					<label for="rating-1" class="rating-star"><i class="fas fa-star"></i></label>
+				</fieldset>
+			</div>
+			<div class="form-group col-md-9">
+				<label for="comments">Comments</label>
+				<textarea class="form-control" id="comments" rows="5" maxlength="500"></textarea>
+			</div>
+		</div>
+		<div class="form-row">
+			<div class="form-group col-12">
+			<button type="submit" class="btn btn-primary">Add review</button>
+			</div>
+		</div>
+	</form>
 </div>

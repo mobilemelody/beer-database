@@ -30,8 +30,42 @@ app.get('/beers/:id',function(req,res,next) {
   res.render('beers', context);
 });
 
+app.get('/beers/:id/edit',function(req,res,next) {
+  let context = {};
+  context.id = req.params.id;
+  context.name = "Beer name";
+  context.brewery = "Brewery name";
+  context.abv = 0.0;
+  context.ibu = 0;
+  res.render('add_beer', context);
+});
+
 app.get('/beers/:id/reviews/add',function(req,res,next) {
   res.render('add_review');
+});
+
+app.get('/styles',function(req,res,next) {
+  res.render('styles');
+});
+
+app.get('/styles/add',function(req,res,next) {
+  res.render('add_style');
+});
+
+app.get('/styles/:id',function(req,res,next) {
+  let context = {};
+  context.id = req.params.id;
+  res.render('styles', context);
+});
+
+app.get('/styles/:id/edit',function(req,res,next) {
+  let context = {};
+  context.id = req.params.id;
+  context.name = "Style name";
+  context.description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sit amet hendrerit arcu. Quisque in ex faucibus, imperdiet orci in, condimentum ex. Phasellus arcu massa, accumsan sed nunc at, mattis ultrices orci.";
+  context.abv = "0.0% - 0.0%";
+  context.ibu = "0 - 0";
+  res.render('add_style', context);
 });
 
 app.get('/breweries',function(req,res,next) {

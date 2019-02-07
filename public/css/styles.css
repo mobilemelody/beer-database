@@ -28,3 +28,42 @@
 .user-rating {
   font-size: 150%;
 }
+
+.rating-star {
+  color: gold;
+}
+
+/* Rating form */
+.rating {
+  float: left;
+}
+
+.rating:not(:checked) > input {
+  position: absolute;
+  top: -99999px;
+}
+
+.rating:not(:checked) > label {
+  color: #ddd;
+  cursor: pointer;
+  font-size: 150%;
+  float: right;
+  width: 1.3em;
+}
+
+.rating > input:checked ~ label {
+  color: gold;
+}
+
+.rating:not(:checked) > label:hover,
+.rating:not(:checked) > label:hover ~ label {
+  color: gold;
+}
+
+.rating > input:checked + label:hover,
+.rating > input:checked + label:hover ~ label,
+.rating > input:checked ~ label:hover,
+.rating > input:checked ~ label:hover ~ label,
+.rating > label:hover ~ input:checked ~ label {
+  color: #gold;
+}

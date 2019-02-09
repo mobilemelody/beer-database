@@ -1,0 +1,38 @@
+<div class="container content pt-3">
+	<h1 class="display-4">
+		{{#if id}}Edit <a href="/breweries/id">Brewery name</a>
+		{{else}}Add a brewery{{/if}}
+	</h1>
+	<form>
+		<div class="form-row">
+			<div class="form-group col-lg-6">
+				<label for="breweryName">Brewery name</label>
+				<input type="text" class="form-control" id="breweryName" value="{{name}}" required>
+			</div>
+			<div class="form-group col-lg-6">
+				<label for="country">Country</label>
+				<select class="form-control country-select" id="country" required>
+					<option value="">Choose one</option>
+				</select>
+			</div>
+		</div>
+		<div class="form-row">
+			<div class="form-group col-lg-6">
+				<label for="city">City</label>
+				<input type="text" class="form-control" id="city" value="{{city}}">
+			</div>
+			<div class="form-group col-lg-6">
+				<label for="state">State/Province/Region</label>
+				<input type="text" class="form-control" id="state" value="{{state}}">
+			</div>
+		</div>
+		<div class="form-row">
+			<div class="form-group col-md-12">
+			<button type="submit" class="btn btn-primary">
+				{{#if id}}Update brewery
+				{{else}}Add brewery{{/if}}
+			</button>
+			</div>
+		</div>
+	</form>
+</div>

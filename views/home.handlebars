@@ -1,10 +1,12 @@
 <div class="jumbotron home-img">
 	<div class="container">
-		<div class="input-group homepage-search-form">
-			<input class="form-control form-control-lg" type="text" placeholder="Search for a beer">
-			<div class="input-group-append">
-				<button class="btn btn-primary btn-lg" type="submit"><i class="fa fa-search"></i></button>
+		<form action="/beers/search" method="get">
+			<div class="input-group homepage-search-form">
+				<input class="form-control form-control-lg" type="text" name="q" placeholder="Search for a beer">
+				<div class="input-group-append">
+					<button class="btn btn-primary btn-lg" type="submit"><i class="fa fa-search"></i></button>
+				</div>
 			</div>
-		</div>
+		</form>
 	</div>
 </div>

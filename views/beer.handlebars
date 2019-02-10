@@ -39,6 +39,38 @@
 		</div>
 </div>
 
+{{else if q}}
+<div class="container content pt-3">
+	<h1 class="display-4">Results for "{{q}}"</h1>
+	<div class="row">
+		<div class="col-md-9">
+			<table class="table beer-table">
+				<thead>
+					<tr>
+						<th></th>
+						<th></th>
+						<th>Average rating</th>
+						<th>Number of ratings</th>
+		      </tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>1</td>
+						<td><a href="/beers/id">Beer name</a></td>
+						<td>0.0</td>
+						<td>0</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="col-md-3">
+			<a href="/beers/add" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i> Add a beer</a>
+			<a href="/styles" class="btn btn-outline-secondary btn-lg btn-block">Search by style</a>
+		</div>
+	</div>
+
+</div>
+
 {{else}}
 <div class="container content pt-3">
 	<h1 class="display-4">Top beers</h1>
@@ -65,6 +97,7 @@
 		</div>
 		<div class="col-md-3">
 			<a href="/beers/add" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i> Add a beer</a>
+			<a href="/breweries" class="btn btn-outline-secondary btn-lg btn-block">Search by brewery</a>
 			<a href="/styles" class="btn btn-outline-secondary btn-lg btn-block">Search by style</a>
 		</div>
 	</div>

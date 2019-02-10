@@ -11,17 +11,19 @@
 			</div>
 			<div class="form-group col-lg-6">
 				<label for="brewery">Brewery</label>
-				<select class="form-control brewery-select" required>
+				<select class="form-control brewery-select" id="brewery" required>
 					<option value="">Choose one</option>
 				</select>
+				<small class="form-text text-muted">Brewery not listed? <a href="/breweries/add">Click here</a> to add the brewery first</small>
 			</div>
 		</div>
 		<div class="form-row">
 			<div class="form-group col-lg-6">
 				<label for="style">Style</label>
-				<select class="form-control style-select" required>
+				<select class="form-control style-select" id="style" required>
 					<option value="">Choose one</option>
 				</select>
+				<small class="form-text text-muted">Style not listed? <a href="/styles/add">Click here</a> to add the style first</small>
 			</div>
 			<div class="form-group col-lg-3 col-sm-6">
 				<label for="abv">ABV</label>
@@ -43,6 +45,9 @@
 				{{#if id}}Update beer
 				{{else}}Add beer{{/if}}
 			</button>
+			{{#if id}}
+			<button type="button" class="btn btn-outline-danger">Delete beer</button>
+			{{/if}}
 			</div>
 		</div>
 	</form>

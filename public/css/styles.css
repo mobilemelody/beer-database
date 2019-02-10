@@ -5,14 +5,14 @@
 
 /* Homepage */
 .home-img {
-	background: url('../images/beer.jpg') no-repeat;
+	background: url('../images/beer.jpg') no-repeat top center;
 	background-size: cover;
-	height: 85vh;
+	height: 86vh;
   margin-bottom: 0;
 }
 
 .homepage-search-form{
-	padding-top: 25vh;
+	padding-top: 40vh;
 }
 
 /* Beer page */

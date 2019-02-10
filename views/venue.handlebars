@@ -1,0 +1,108 @@
+{{#if id}}
+<div class="container content pt-3">
+	<div class="display-4 row">
+		<div class="col-md-9">Venue name</div>
+		<div class="text-md-right col-md-3">
+			<a href="/venues/id/edit" class="btn btn-outline-secondary"><i class="fas fa-edit"></i> Edit venue</a>
+		</div>
+	</div>
+	<div class="brewery-info text-muted pb-3">
+		Address, City, State
+	</div>
+	<h2>Beers</h2>
+	<table class="table beer-table">
+		<thead>
+			<tr>
+				<th></th>
+				<th></th>
+				<th>Average rating</th>
+				<th>Number of ratings</th>
+      </tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>1</td>
+				<td><a href="/beers/id">Beer name</a></td>
+				<td>0.0</td>
+				<td>0</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+{{else if city}}
+<div class="container content pt-3">
+	<h1 class="display-4">Venues in {{city}}, {{state}}</h1>
+	<div class="row">
+		<div class="col-md-9">
+			<table class="table beer-table">
+				<thead>
+					<tr>
+						<th></th>
+						<th>Venue name</th>
+						<th>Address</th>
+						<th>Number of beers</th>
+		      </tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>1</td>
+						<td><a href="/venues/id">Venue name</a></td>
+						<td>Address</td>
+						<td>1</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="col-md-3">
+			<a href="/venues/add" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i> Add a venue</a>
+		</div>
+	</div>
+</div>
+
+{{else if state}}
+<div class="container content pt-3">
+	<h1 class="display-4">Venues in {{state}}</h1>
+	<div class="row">
+		<div class="col-md-9">
+			<table class="table beer-table">
+				<thead>
+					<tr>
+						<th></th>
+						<th>Venue name</th>
+						<th>City</th>
+						<th>Number of beers</th>
+		      </tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>1</td>
+						<td><a href="/venues/id">Venue name</a></td>
+						<td><a href="/venues/state/{{state}}/city/city">City</a></td>
+						<td>1</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="col-md-3">
+			<a href="/venues/add" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i> Add a venue</a>
+		</div>
+	</div>
+</div>
+
+{{else}}
+<div class="container content pt-3">
+	<h1 class="display-4">Venues</h1>
+	<div class="row">
+		<div class="col-md-9">
+			<h3><a href="/venues/state/state">State</a></h3>
+			<ul>
+				<li><a href="/venues/state/state/city/city">City</a></li>
+			</ul>
+		</div>
+		<div class="col-md-3">
+			<a href="/venues/add" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i> Add a venue</a>
+		</div>
+	</div>
+</div>
+{{/if}}

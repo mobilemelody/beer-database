@@ -39,8 +39,8 @@
 }
 
 .rating:not(:checked) > input {
-  position: absolute;
-  top: -99999px;
+  margin-top: 20px;
+  opacity: 0;
 }
 
 .rating:not(:checked) > label {
@@ -48,6 +48,8 @@
   cursor: pointer;
   font-size: 150%;
   float: right;
+  left: -72px;
+  position: relative;
   width: 1.3em;
 }
 

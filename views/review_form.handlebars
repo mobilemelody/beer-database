@@ -20,7 +20,7 @@
 				<label>Rating</label>
 				<div class="clearfix"></div>
 				<fieldset class="rating">
-					<input type="radio" id="rating-5" name="rating" value="5">
+					<input type="radio" id="rating-5" name="rating" value="5" required>
 					<label for="rating-5" class="rating-star"><i class="fas fa-star"></i></label>
 					<input type="radio" id="rating-4" name="rating" value="4">
 					<label for="rating-4" class="rating-star"><i class="fas fa-star"></i></label>
@@ -44,3 +44,7 @@
 		</div>
 	</form>
 </div>
+
+<script>
+	document.getElementById('date').valueAsDate = new Date();
+</script>

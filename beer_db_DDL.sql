@@ -10,17 +10,26 @@ DROP TABLE IF EXISTS `venue`;
 DROP TABLE IF EXISTS `beer`;
 DROP TABLE IF EXISTS `style`;
 DROP TABLE IF EXISTS `brewery`;
+DROP TABLE IF EXISTS `country`;
 
 /*CREATE THE TABLES*/
+
+/*CREATE COUNTRY TABLE*/
+CREATE TABLE country (
+    id INTEGER AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL,
+    PRIMARY KEY (id)
+);
 
 /*CREATE BREWERY TABLE*/
 CREATE TABLE brewery (
     id INTEGER AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL,
-    country VARCHAR(100) NOT NULL,
+    country INTEGER NOT NULL,
     city VARCHAR(100),
     state VARCHAR(100),
-    PRIMARY KEY (id) 
+    PRIMARY KEY (id),
+    FOREIGN KEY (country) REFERENCES country (id) ON DELETE CASCADE
 );
 
 /*CREATE STYLE TABLE*/
@@ -58,7 +67,7 @@ CREATE TABLE venue (
 
 /*CREATE USER TABLE*/
 CREATE TABLE db_user (
-    id INT AUTO_INCREMENT,
+    id INTEGER AUTO_INCREMENT,
     user_name VARCHAR(20) NOT NULL,
     email VARCHAR(100),
     PRIMARY KEY (id) 
@@ -66,7 +75,7 @@ CREATE TABLE db_user (
 
 /*CREATE REVIEW TABLE*/
 CREATE TABLE review (
-    id INT AUTO_INCREMENT,
+    id INTEGER AUTO_INCREMENT,
     user_name INTEGER,
     beer INTEGER NOT NULL,
     rev_date DATE,
@@ -87,9 +96,10 @@ CREATE TABLE beer_venue (
 );
 
 /* ADD SAMPLE DATA */
+INSERT INTO country VALUES (1, 'United States');
 INSERT INTO db_user VALUES (1, 'Melody', 'reebsm@oregonstate.edu'), (2, 'Brian', 'spragubr@oregonstate.edu');
 INSERT INTO style VALUES (1, 'Pilsner', 'Pilsner (also pilsener or simply pils) is a type of pale lager. It takes its name from the Czech city of Pilsen, where it was first produced in 1842.', '4.2% - 5.4%', '35 - 45'), (2, 'IPA', 'India pale ale (IPA) is a hoppy beer style within the broader category of pale ale.', '5.0% - 9.7%', '40 - 120');
-INSERT INTO brewery VALUES (1, 'Trumer Brauerei', 'United States', 'Berkeley', 'California'), (2, 'Modern Times Beer', 'United States', 'San Diego', 'California'), (3, 'Berryessa Brewing Co', 'United States', 'Winters', 'California');
+INSERT INTO brewery VALUES (1, 'Trumer Brauerei', 1, 'Berkeley', 'California'), (2, 'Modern Times Beer', 1, 'San Diego', 'California'), (3, 'Berryessa Brewing Co', 1, 'Winters', 'California');
 INSERT INTO venue VALUES (1, 'Cato''s Ale House', '3891 Piedmont Ave', 'Oakland', 'California');
 INSERT INTO beer VALUES (1, 'Trumer Pils', 1, 1, 4.9, 26), (2, 'Orderville', 2, 2, 7.2, 75), (3, 'Propaganda Pils', 3, 1, 6.0, 60);
 INSERT INTO review VALUES (1, 1, 1, '2019-02-10', 5, 'Crisp and refreshing!');

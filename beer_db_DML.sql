@@ -98,7 +98,10 @@ GROUP BY brewery.id
 ORDER BY avg_rating DESC
 
 -- Select individual brewery
-SELECT * FROM brewery WHERE id=:idInput
+SELECT brewery.id, brewery.name, brewery.city, brewery.state, country.name 
+FROM brewery
+INNER JOIN country ON brewery.country=country.id
+WHERE brewery.id=:idInput
 
 -- Select all beers for a single brewery sorted by average rating
 SELECT beer.id, beer.name, style.id, style.name, AVG(review.rating) AS avg_rating, COUNT(review.rating) AS num_reviews

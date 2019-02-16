@@ -68,7 +68,7 @@ CREATE TABLE venue (
 /*CREATE USER TABLE*/
 CREATE TABLE db_user (
     id INTEGER AUTO_INCREMENT,
-    user_name VARCHAR(20) NOT NULL,
+    user_name VARCHAR(20) NOT NULL UNIQUE,
     email VARCHAR(100),
     PRIMARY KEY (id) 
 );

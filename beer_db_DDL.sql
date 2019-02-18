@@ -24,7 +24,7 @@ CREATE TABLE country (
 /*CREATE BREWERY TABLE*/
 CREATE TABLE brewery (
     id INTEGER AUTO_INCREMENT,
-    name VARCHAR(100) NOT NULL,
+    name VARCHAR(100) NOT NULL UNIQUE,
     country INTEGER NOT NULL,
     city VARCHAR(100),
     state VARCHAR(100),
@@ -35,7 +35,7 @@ CREATE TABLE brewery (
 /*CREATE STYLE TABLE*/
 CREATE TABLE style (
     id INTEGER AUTO_INCREMENT,
-    name VARCHAR(100) NOT NULL,
+    name VARCHAR(100) NOT NULL UNIQUE,
     description VARCHAR(300),
     abv_range VARCHAR(20),
     ibu_range VARCHAR(20),

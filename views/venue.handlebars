@@ -19,6 +19,7 @@
 				<th>Style</th>
 				<th>Average rating</th>
 				<th>Number of ratings</th>
+				<th></th>
       </tr>
 		</thead>
 		<tbody>
@@ -29,9 +30,19 @@
 				<td><a href="/styles/id">Style name</a></td>
 				<td>0.0</td>
 				<td>0</td>
+				<td><button class="btn btn-link text-secondary"><i class="far fa-trash-alt"></i></button></td>
 			</tr>
 		</tbody>
 	</table>
+	<form class="form-inline">
+		<label class="sr-only" for="beer">Beer</label>
+		<select class="form-control beer-select mr-3" id="beer" required>
+			<option value="">Choose one</option>
+			<option value="Beer name">Beer name</option>
+		</select>
+		<button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i> Add beer</button>
+	</form>
+	<small class="form-text text-muted">Beer not listed? <a href="/beers/add">Click here</a> to add the beer first</small>
 </div>
 
 {{else if city}}

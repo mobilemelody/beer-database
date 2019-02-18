@@ -149,6 +149,10 @@ WHERE beer_venue.venue=:venueInput
 GROUP BY beer.id
 ORDER BY beer.name ASC
 
+/* REVIEW PAGE */
+-- Selects 10 most recent reviews
+SELECT * FROM review ORDER BY rev_date DESC LIMIT 10
+
 /* USER PAGES */
 -- Select all users sorted by number of reviews
 SELECT db_user.id, db_user.user_name, COUNT(review.id) AS num_reviews
@@ -194,34 +198,12 @@ UPDATE venue SET name=:nameInput,
                 state=:stateInput
     WHERE id=:idInput
 
--- Update a review's rating, comments, and date
-UPDATE review SET rev_date=:rev_dateInput, 
-                rating=:ratingInput, 
-                comments=:commentsInput  
-    WHERE id=:idInput
-
--- Update a user's email address
-UPDATE db_user SET email=:emailInput 
-    WHERE id=:idInput
-
 /* DELETE QUERIES */
 -- Remove a beer from the db
-DELETE FROM beer WHERE id=:idInpupt
-
--- Remove a style from the db
-DELETE FROM style WHERE id=:idInpupt
-
--- Remove a brewery from the db
-DELETE FROM brewery WHERE id=:idInpupt
+DELETE FROM beer WHERE id=:idInput
 
 -- Remove a venue from the db
-DELETE FROM venue WHERE id=:idInpupt
-
--- Remove a review from the dp
-DELETE FROM review WHERE id=:idInpupt
-
--- Remove a user from the db
-DELETE FROM db_user WHERE id=:idInpupt
+DELETE FROM venue WHERE id=:idInput
 
 -- Remove a beer from a venue
-DELETE FROM beer_venue WHERE id=:idInpupt
+DELETE FROM beer_venue WHERE beer=:beerInput AND venue=:venueInput

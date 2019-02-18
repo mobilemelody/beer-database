@@ -172,6 +172,13 @@ app.get('/venues/:id/edit',function(req,res,next) {
   res.render('venue_form', context);
 });
 
+/* Routes for reviews page */
+app.get('/reviews',function(req,res,next) {
+  let context = {};
+  context.review_active = true;
+  res.render('review', context);
+});
+
 /* Routes for user pages */
 app.get('/users',function(req,res,next) {
   let context = {};

@@ -1,18 +1,20 @@
 <div class="container content pt-3">
-	<h1 class="display-4">Add a review for <a href="/beers/id">Beer name</a></h1>
-	<form>
+	<h1 class="display-4">Add a review for <a href="/beers/{{id}}">{{beer.name}}</a></h1>
+	<form id="reviewForm" action="/beers/{{id}}/reviews" method="post">
 		<div class="form-row">
 			<div class="form-group col-md-6">
 				<label for="user">User</label>
-					<select class="form-control" id="user">
+					<select class="form-control" id="user" name="user">
 						<option value="">Anonymous</option>
-						<option>Username</option>
+						{{#each users}}
+							<option value="{{id}}">{{user_name}}</option>
+						{{/each}}
 					</select>
 					<small class="form-text text-muted"><a href="/users/add">Click here</a> to add yourself as a user</small>
 			</div>
 			<div class="form-group col-md-6">
 				<label for="date">Date</label>
-				<input type="date" class="form-control" id="date">
+				<input type="date" class="form-control" id="date" name="date">
 			</div>
 		</div>
 		<div class="form-row">
@@ -34,7 +36,7 @@
 			</div>
 			<div class="form-group col-md-9">
 				<label for="comments">Comments</label>
-				<textarea class="form-control" id="comments" rows="5" maxlength="500"></textarea>
+				<textarea class="form-control" id="comments" name="comments" rows="5" maxlength="500"></textarea>
 			</div>
 		</div>
 		<div class="form-row">

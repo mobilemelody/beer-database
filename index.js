@@ -1,11 +1,27 @@
+require('dotenv').config();
+
 const express = require('express');
 const mysql = require('./dbcon.js');
 const bodyParser = require('body-parser');
-const handlebars = require('express-handlebars').create({defaultLayout:'main', helpers: {
-  inc: function(value, options) {
-    return parseInt(value) + 1;
+const handlebars = require('express-handlebars').create({
+  defaultLayout:'main', 
+  helpers: {
+    inc: function(value) {
+      return parseInt(value) + 1;
+    },
+    decimal: function(value) {
+      if(value) {
+        return value.toFixed(1);
+      }
+    },
+    ifEq: function(val1, val2, options) {
+      if (val1 == val2) {
+        return options.fn(this);
+      }
+      return options.inverse(this);
+    }
   }
-}});
+});
 
 const app = express();
 

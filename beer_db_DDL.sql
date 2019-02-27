@@ -83,7 +83,7 @@ CREATE TABLE review (
     comments VARCHAR(500),
     PRIMARY KEY (id),
     FOREIGN KEY (beer) REFERENCES beer (id) ON DELETE CASCADE, /*Review specific needs for each entitiy*/
-    FOREIGN KEY (user_name) REFERENCES db_user (id) ON DELETE CASCADE /*Review specific needs for each entitiy*/
+    FOREIGN KEY (user_name) REFERENCES db_user (id) ON DELETE SET NULL
 );
 
 /*CREATE BEER_VENUE TABLE*/

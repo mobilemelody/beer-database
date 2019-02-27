@@ -33,7 +33,7 @@ VALUES (:beerInput, :venueInput)
 
 /* SEARCH PAGE */
 -- Search for beers matching criteria
-SELECT beer.id, beer.name, brewery.id, brewery.name, style.id, style.name, AVG(review.rating) AS avg_rating
+SELECT beer.id AS id, beer.name AS name, brewery.id AS brewery_id, brewery.name AS brewery, style.id AS style_id, style.name AS style, AVG(review.rating) AS avg_rating
 FROM beer 
 INNER JOIN brewery ON beer.brewery=brewery.id
 INNER JOIN style ON beer.style=style.id 
@@ -45,7 +45,7 @@ GROUP BY beer.id
 
 /* BEER PAGES */
 -- Show beers in descending order based on average rating
-SELECT beer.id, beer.name, brewery.id, brewery.name, style.id, style.name, AVG(review.rating) AS avg_rating, COUNT(review.rating) AS num_reviews
+SELECT beer.id AS beer_id, beer.name AS name, brewery.id AS brewery_id, brewery.name AS brewery, style.id AS style_id, style.name AS style, AVG(review.rating) AS avg_rating, COUNT(review.rating) AS num_reviews
 FROM beer
 INNER JOIN brewery ON beer.brewery=brewery.id
 INNER JOIN style ON beer.style=style.id
@@ -54,10 +54,20 @@ GROUP BY beer.id
 ORDER BY avg_rating DESC
 
 -- Select individual beer
-SELECT * FROM beer WHERE id=:idInput
+SELECT beer.name AS name, brewery.id AS brewery_id, brewery.name AS brewery, country.name AS country, brewery.city AS city, brewery.state AS state, style.id AS style_id, style.name AS style, beer.abv AS abv, beer.ibu AS ibu, AVG(review.rating) AS avg_rating, COUNT(review.rating) AS num_reviews 
+FROM beer 
+INNER JOIN brewery ON beer.brewery=brewery.id 
+INNER JOIN country ON brewery.country=country.id
+INNER JOIN style ON beer.style=style.id 
+LEFT JOIN review ON beer.id=review.beer 
+WHERE beer.id = :idInput
+GROUP BY beer.id
 
 -- Select reviews for individual beer
-SELECT * FROM review WHERE beer=:beerInput
+SELECT review.user_name AS user_id, review.rev_date, review.rating, review.comments, db_user.user_name AS user_name 
+FROM review 
+LEFT JOIN db_user ON review.user_name=db_user.id 
+WHERE beer = :beerInput
 
 -- Select all users sorted alphabetically for dropdown in reviews form
 SELECT id, user_name FROM db_user ORDER BY user_name ASC

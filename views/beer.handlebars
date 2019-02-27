@@ -1,42 +1,44 @@
 {{#if id}}
 <div class="container content pt-3">
 	<div class="display-4 row">
-		<div class="col-lg-6">Beer name</div>
+		<div class="col-lg-6">{{beer.name}}</div>
 		<div class="text-lg-right col-lg-6">
-			<a href="/beers/id/reviews/add" class="btn btn-primary"><i class="fas fa-star"></i> Add review</a>
-			<a href="/beers/id/edit" class="btn btn-outline-secondary"><i class="fas fa-edit"></i> Edit beer</a>
+			<a href="/beers/{{id}}/reviews/add" class="btn btn-primary"><i class="fas fa-star"></i> Add review</a>
+			<a href="/beers/{{id}}/edit" class="btn btn-outline-secondary"><i class="fas fa-edit"></i> Edit beer</a>
 		</div>
 	</div>
 	<div class="beer-info row">
 		<div class="col-md-9">
 			<div class="brewery lead">
-				<a href="/breweries/id">Brewery name</a>
-				<small class="text-muted">(City/State, Country)</small>
+				<a href="/breweries/{{beer.brewery_id}}">{{beer.brewery}}</a>
+				<small class="text-muted">({{beer.city}}, {{beer.state}}, {{beer.country}})</small>
 			</div>
 			<div class="style">
-				Style: <a href="/styles/id">Style name</a>
+				Style: <a href="/styles/{{beer.style_id}}">{{beer.style}}</a>
 			</div>
 		</div>
 		<div class="col-md-3">
-			<div class="abv">ABV: 0.0%</div>
-			<div class="ibu">IBU: 0</div>
+			<div class="abv">ABV: {{beer.abv}}%</div>
+			<div class="ibu">IBU: {{beer.ibu}}</div>
 		</div>
 	</div>
 	<div class="rating-info py-3">
-		<div class="beer-rating"><i class="fas fa-star rating-star"></i> 0.0</div>
-		<div class="text-muted"><small>1 review</small></div>
+		<div class="beer-rating"><i class="fas fa-star rating-star"></i> {{decimal beer.avg_rating}}</div>
+		<div class="text-muted"><small>{{beer.num_reviews}} reviews</small></div>
 	</div>
 	<h2>Reviews</h2>
+		{{#each reviews}}
 		<div class="review py-3 border-top">
 			<div class="review-info row">
 				<div class="col-9">
-					<div class="review-user text-bold"><a href="/users/id">Username</a></div>
-					<div class="review-date text-muted"><small>February 4, 2019</small></div>
+					<div class="review-user text-bold">{{#if user_id}}<a href="/users/{{user_id}}">{{user_name}}</a>{{else}}Anonymous{{/if}}</div>
+					<div class="review-date text-muted"><small>{{rev_date}}</small></div>
 				</div>
-				<div class="user-rating col-3 text-right"><i class="fas fa-star rating-star"></i> 0.0</div>
+				<div class="user-rating col-3 text-right"><i class="fas fa-star rating-star"></i> {{decimal rating}}</div>
 			</div>
-			<div class="user-comments">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sit amet hendrerit arcu. Quisque in ex faucibus, imperdiet orci in, condimentum ex. Phasellus arcu massa, accumsan sed nunc at, mattis ultrices orci. Aliquam erat volutpat. Duis ipsum lectus, semper viverra facilisis ut, porttitor sed diam. In pretium laoreet leo, vel interdum arcu viverra quis. Curabitur porta consequat elit.</div>
+			<div class="user-comments">{{comments}}</div>
 		</div>
+		{{/each}}
 </div>
 
 {{else if q}}
@@ -55,13 +57,15 @@
 		      </tr>
 				</thead>
 				<tbody>
+				{{#each results}}
 					<tr>
-						<td>1</td>
-						<td><a href="/beers/id">Beer name</a></td>
-						<td><a href="/breweries/id">Brewery name</a></td>
-						<td><a href="/styles/id">Style name</a></td>
-						<td>0.0</td>
+						<td>{{inc @index}}</td>
+						<td><a href="/beers/{{id}}">{{name}}</a></td>
+						<td><a href="/breweries/{{brewery_id}}">{{brewery}}</a></td>
+						<td><a href="/styles/{{style_id}}">{{style}}</a></td>
+						<td>{{decimal avg_rating}}</td>
 					</tr>
+					{{/each}}
 				</tbody>
 			</table>
 		</div>
@@ -96,7 +100,7 @@
 						<td><a href="/beers/{{beer_id}}">{{name}}</a></td>
 						<td><a href="/breweries/{{brewery_id}}">{{brewery}}</a></td>
 						<td><a href="/styles/{{style_id}}">{{style}}</a></td>
-						<td>{{avg_rating}}</td>
+						<td>{{decimal avg_rating}}</td>
 						<td>{{num_reviews}}</td>
 					</tr>
 					{{/each}}

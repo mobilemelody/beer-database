@@ -1,18 +1,21 @@
 <div class="container content pt-3">
 	<h1 class="display-4">
-		{{#if id}}Edit <a href="/beers/id">Beer name</a>
+		{{#if id}}Edit <a href="/beers/{{id}}">{{beer.name}}</a>
 		{{else}}Add a beer{{/if}}
 	</h1>
-	<form>
+	<form id="beerForm" {{#if id}}action="/beers/{{id}}/edit"{{else}}action="/beers/add"{{/if}} method="post">
 		<div class="form-row">
 			<div class="form-group col-lg-6">
 				<label for="beerName">Beer name</label>
-				<input type="text" class="form-control" id="beerName" value="{{name}}" required>
+				<input type="text" class="form-control" id="beerName" name="name" value="{{beer.name}}" required>
 			</div>
 			<div class="form-group col-lg-6">
 				<label for="brewery">Brewery</label>
-				<select class="form-control brewery-select" id="brewery" required>
+				<select class="form-control brewery-select" id="brewery" name="brewery" required>
 					<option value="">Choose one</option>
+					{{#each breweries}}
+					<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>
+					{{/each}}
 				</select>
 				<small class="form-text text-muted">Brewery not listed? <a href="/breweries/add">Click here</a> to add the brewery first</small>
 			</div>
@@ -20,15 +23,18 @@
 		<div class="form-row">
 			<div class="form-group col-lg-6">
 				<label for="style">Style</label>
-				<select class="form-control style-select" id="style" required>
+				<select class="form-control style-select" id="style" name="style" required>
 					<option value="">Choose one</option>
+					{{#each styles}}
+					<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>
+					{{/each}}
 				</select>
 				<small class="form-text text-muted">Style not listed? <a href="/styles/add">Click here</a> to add the style first</small>
 			</div>
 			<div class="form-group col-lg-3 col-sm-6">
 				<label for="abv">ABV</label>
 				<div class="input-group">
-					<input type="number" step="0.1" min="0" class="form-control" id="abv" value="{{abv}}">
+					<input type="number" step="0.1" min="0" class="form-control" id="abv" name="abv" value="{{decimal beer.abv}}">
 					<div class="input-group-append">
 						<div class="input-group-text">%</div>
 					</div>
@@ -36,7 +42,7 @@
 			</div>
 			<div class="form-group col-lg-3 col-sm-6">
 				<label for="ibu">IBU</label>
-				<input type="number" class="form-control" id="ibu" value="{{ibu}}">
+				<input type="number" class="form-control" id="ibu" name="ibu" value="{{beer.ibu}}">
 			</div>
 		</div>
 		<div class="form-row">

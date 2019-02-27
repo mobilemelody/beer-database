@@ -1,8 +1,40 @@
 <div class="container content pt-3">
 	<h1 class="display-4">
-		{{#if id}}Edit <a href="/breweries/id">Brewery name</a>
-		{{else}}Add a brewery{{/if}}
-	</h1>
+		{{#if id}}Edit <a href="/breweries/{{brewery.id}}">{{brewery.name}}</a></h1>
+		<form action="/breweries/{{brewery.id}}" method="POST">
+		<div class="form-row">
+			<div class="form-group col-lg-6">
+				<label for="breweryName">Brewery name</label>
+				<input type="text" class="form-control" name="breweryName" value="{{brewery.name}}"required>
+			</div>
+			<div class="form-group col-lg-6">
+				<label for="country">Country</label>
+				<select class="form-control country-select" name="country" required>
+					<option value="{{brewery.c_id}}">{{brewery.country}}</option>
+					{{#each country}}
+					<option value="{{country_id}}">{{country_name}}</option>
+					{{/each}}
+				</select>
+			</div>
+		</div>
+		<div class="form-row">
+			<div class="form-group col-lg-6">
+				<label for="city">City</label>
+				<input type="text" class="form-control" name="city" value="{{brewery.city}}">
+			</div>
+			<div class="form-group col-lg-6">
+				<label for="state">State/Province/Region</label>
+				<input type="text" class="form-control" name="state" value="{{brewery.state}}">
+			</div>
+		</div>
+		<div class="form-row">
+			<div class="form-group col-md-12">
+			<button type="submit" class="btn btn-primary">Update brewery</button>
+			</div>
+		</div>
+	</form>
+{{else}}
+	<h1>Add a brewery</h1>
 	<form action="/breweries" method="POST">
 		<div class="form-row">
 			<div class="form-group col-lg-6">
@@ -31,11 +63,9 @@
 		</div>
 		<div class="form-row">
 			<div class="form-group col-md-12">
-			<button type="submit" class="btn btn-primary">
-				{{#if id}}Update brewery
-				{{else}}Add brewery{{/if}}
-			</button>
+			<button type="submit" class="btn btn-primary">Add brewery</button>
 			</div>
 		</div>
 	</form>
+{{/if}}
 </div>

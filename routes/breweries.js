@@ -24,6 +24,34 @@ function getCountries(res, mysql, context, complete) {
   });
 }
 
+function selectBrewery(res, mysql, context, id, complete) {
+  var sql = "SELECT brewery.id AS id, brewery.name AS name, brewery.city AS city, brewery.state AS state, country.id AS c_id, country.name AS country FROM brewery INNER JOIN country ON brewery.country=country.id WHERE brewery.id=?";
+  var inserts = [id];
+  mysql.pool.query(sql, inserts, function(error, results, fields) {
+    if(error) {
+      res.write(JSON.stringify(error));
+      res.end();
+    }
+    context.brewery = results[0];
+    console.log(context.brewery);
+    complete();
+  });
+}
+
+function getBeers(res, mysql, context, id, complete) {
+  var sql = "SELECT beer.id AS id, beer.name AS name, style.name AS style, AVG(review.rating) AS avg_rating, COUNT(review.rating) AS num_reviews FROM beer INNER JOIN style ON beer.style=style.id LEFT JOIN review ON beer.id=review.beer WHERE beer.brewery=? GROUP BY beer.id ORDER BY avg_rating DESC";
+  var inserts = [id];
+  mysql.pool.query(sql, inserts, function(error, results, fields) {
+    if(error) {
+      res.write(JSON.stringify(error));
+      res.end();
+    }
+    context.beers = results;
+    console.log(context.beers);
+    complete();
+  });
+}
+
 /* Routes for brewery pages */
 router.get('/',function(req,res,next) {
   let callbackCount = 0;
@@ -54,22 +82,37 @@ router.get('/add',function(req,res,next) {
 });
 
 router.get('/:id',function(req,res,next) {
+  let callbackCount = 0;
   let context = {};
+  let mysql = req.app.get('mysql');
   context.brewery_active = true;
   context.id = req.params.id;
-  res.render('brewery', context);
+  selectBrewery(res, mysql, context, context.id, complete);
+  getBeers(res, mysql, context, context.id, complete);
+  function complete() {
+    callbackCount++;
+    if(callbackCount >= 2) {
+      console.log(context);
+      res.render('brewery', context);
+    }
+  }
 });
 
 router.get('/:id/edit',function(req,res,next) {
+  let callbackCount = 0;
   let context = {};
+  let mysql = req.app.get('mysql');
   context.brewery_active = true;
   context.id = req.params.id;
-  // TEST DATA
-  context.name = "Brewery name";
-  context.country = "Country name";
-  context.city = "City name";
-  context.state = "State name";
-  res.render('brewery_form', context);
+  selectBrewery(res, mysql, context, context.id, complete);
+  getCountries(res, mysql, context, complete);
+  function complete() {
+    callbackCount++;
+    if(callbackCount >= 2) {
+      console.log(context.brewery);
+      res.render('brewery_form', context);
+    }
+  }
 });
 
 router.post('/', function(req,res) {
@@ -77,6 +120,22 @@ router.post('/', function(req,res) {
   var mysql = req.app.get('mysql');
   var sql = "INSERT INTO brewery (name, country, city, state) VALUES (?,?,?,?)";
   var inserts = [req.body.breweryName, req.body.country, req.body.city, req.body.state];
+  sql = mysql.pool.query(sql,inserts,function(error, results, fields){
+      if(error){
+          console.log(JSON.stringify(error))
+          res.write(JSON.stringify(error));
+          res.end();
+      }else{
+          res.redirect('/breweries');
+      }
+  });
+});
+
+router.post('/:id', function(req,res) {
+  console.log(req.body);
+  var mysql = req.app.get('mysql');
+  var sql = "UPDATE brewery SET name=?, country=?, city=?, state=? WHERE id=?";
+  var inserts = [req.body.breweryName, req.body.country, req.body.city, req.body.state, req.params.id];
   sql = mysql.pool.query(sql,inserts,function(error, results, fields){
       if(error){
           console.log(JSON.stringify(error))

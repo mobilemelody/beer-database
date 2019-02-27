@@ -146,7 +146,7 @@ GROUP BY venue.id
 ORDER BY venue.name ASC
 
 -- Select a single venue
-SELECT * FROM venue 
+SELECT * FROM venue WHERE id=:venueInput
 
 -- Select all beers for a single venue sorted alphabetically
 SELECT beer.id, beer.name, brewery.id, brewery.name, style.id, style.name, AVG(review.rating) AS avg_rating, COUNT(review.rating) AS num_reviews
@@ -159,9 +159,17 @@ WHERE beer_venue.venue=:venueInput
 GROUP BY beer.id
 ORDER BY beer.name ASC
 
+-- Select all beers sorted alphabetically for dropdown in adding to taplist
+SELECT * FROM beer ORDER BY name ASC
+
 /* REVIEW PAGE */
 -- Selects 10 most recent reviews
-SELECT * FROM review ORDER BY rev_date DESC LIMIT 10
+SELECT beer.name AS beer, db_user.user_name AS username, review.rev_date AS rev_date, review.rating AS rating, review.comments AS comments
+FROM review 
+INNER JOIN beer ON review.beer=beer.id
+LEFT JOIN db_user ON review.user_name=db_user.id
+ORDER BY rev_date 
+DESC LIMIT 10
 
 /* USER PAGES */
 -- Select all users sorted by number of reviews

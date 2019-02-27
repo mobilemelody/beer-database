@@ -47,12 +47,14 @@
 		      </tr>
 				</thead>
 				<tbody>
+					{{#each breweries}}
 					<tr>
-						<td>1</td>
-						<td><a href="/breweries/id">Brewery name</a></td>
-						<td>0.0</td>
-						<td>1</td>
+						<td>{{inc @index}}</td>
+						<td><a href="/breweries/{{{brewery_id}}}">{{name}}</a></td>
+						<td>{{avg_rating}}</td>
+						<td>{{num_beers}}</td>
 					</tr>
+					{{/each}}
 				</tbody>
 			</table>
 		</div>

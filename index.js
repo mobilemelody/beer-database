@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const mysql = require('./dbcon.js');
 const bodyParser = require('body-parser');

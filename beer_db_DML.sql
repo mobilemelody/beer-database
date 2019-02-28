@@ -173,16 +173,20 @@ DESC LIMIT 10
 
 /* USER PAGES */
 -- Select all users sorted by number of reviews
-SELECT db_user.id, db_user.user_name, COUNT(review.id) AS num_reviews
+SELECT db_user.id AS user_id, db_user.user_name AS user_name, COUNT(review.id) AS num_reviews
 FROM db_user
 LEFT JOIN review ON db_user.id=review.user_name
 GROUP BY db_user.id
 ORDER BY num_reviews DESC
 
+-- Select individual user
+SELECT * FROM db_user WHERE id=:userInput
+
 -- Select all reviews by user sorted by most recent
-SELECT *
+SELECT beer.id AS beer_id, beer.name AS beer_name, review.rev_date AS rev_date, review.rating AS rating, review.comments AS comments
 FROM review
-WHERE user_name=:userInput
+INNER JOIN beer ON review.beer=beer.id
+WHERE review.user_name=:userInput
 ORDER BY rev_date DESC
 
 /* UPDATE QUERIES */

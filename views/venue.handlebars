@@ -1,13 +1,13 @@
 {{#if id}}
 <div class="container content pt-3">
 	<div class="display-4 row">
-		<div class="col-md-9">Venue name</div>
+		<div class="col-md-9">{{venue.name}}</div>
 		<div class="text-md-right col-md-3">
-			<a href="/venues/id/edit" class="btn btn-outline-secondary"><i class="fas fa-edit"></i> Edit venue</a>
+			<a href="/venues/{{venue.id}}/edit" class="btn btn-outline-secondary"><i class="fas fa-edit"></i> Edit venue</a>
 		</div>
 	</div>
 	<div class="brewery-info text-muted pb-3">
-		Address, City, State
+		{{venue.address}}, {{venue.city}}, {{venue.state}}
 	</div>
 	<h2>Beers</h2>
 	<table class="table beer-table">
@@ -23,22 +23,26 @@
       </tr>
 		</thead>
 		<tbody>
+			{{#each taplist}}
 			<tr>
-				<td>1</td>
-				<td><a href="/beers/id">Beer name</a></td>
-				<td><a href="/breweries/id">Brewery name</a></td>
-				<td><a href="/styles/id">Style name</a></td>
-				<td>0.0</td>
-				<td>0</td>
+				<td>{{inc @index}}</td>
+				<td><a href="/beers/{{beer_id}}">{{beer}}</a></td>
+				<td><a href="/breweries/{{brewery_id}}">{{brewery}}</a></td>
+				<td><a href="/styles/{{style_id}}">{{style}}</a></td>
+				<td>{{avg_rating}}</td>
+				<td>{{num_reviews}}</td>
 				<td><button class="btn btn-link text-secondary"><i class="far fa-trash-alt"></i></button></td>
 			</tr>
+			{{/each}}
 		</tbody>
 	</table>
-	<form class="form-inline">
+	<form class="form-inline" id="addTapForm" action="/venues/{{id}}/taplist/add" method="post">
 		<label class="sr-only" for="beer">Beer</label>
-		<select class="form-control beer-select mr-3" id="beer" required>
+		<select class="form-control beer-select mr-3" id="beer" name="beer" required>
 			<option value="">Choose one</option>
-			<option value="Beer name">Beer name</option>
+			{{#each beers}}
+			<option value="{{id}}">{{name}}</option>
+			{{/each}}
 		</select>
 		<button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i> Add beer</button>
 	</form>
@@ -60,12 +64,14 @@
 		      </tr>
 				</thead>
 				<tbody>
+					{{#each venues}}
 					<tr>
-						<td>1</td>
-						<td><a href="/venues/id">Venue name</a></td>
-						<td>Address</td>
-						<td>1</td>
+						<td>{{inc @index}}</td>
+						<td><a href="/venues/{{venue_id}}">{{venue_name}}</a></td>
+						<td>{{address}}</td>
+						<td>{{num_beers}}</td>
 					</tr>
+					{{/each}}
 				</tbody>
 			</table>
 		</div>
@@ -90,12 +96,14 @@
 		      </tr>
 				</thead>
 				<tbody>
+					{{#each venues}}
 					<tr>
-						<td>1</td>
-						<td><a href="/venues/id">Venue name</a></td>
-						<td><a href="/venues/state/{{state}}/city/city">City</a></td>
-						<td>1</td>
+						<td>{{inc @index}}</td>
+						<td><a href="/venues/{{venue_id}}">{{venue_name}}</a></td>
+						<td><a href="/venues/state/{{../state}}/city/{{city}}">{{city}}</a></td>
+						<td>{{num_beers}}</td>
 					</tr>
+					{{/each}}
 				</tbody>
 			</table>
 		</div>
@@ -110,9 +118,10 @@
 	<h1 class="display-4">Venues</h1>
 	<div class="row">
 		<div class="col-md-9">
-			<h3><a href="/venues/state/state">State</a></h3>
 			<ul>
-				<li><a href="/venues/state/state/city/city">City</a></li>
+				{{#each cities}}
+				<li><a href="/venues/state/{{state}}">{{state}}</a>, <a href="/venues/state/{{state}}/city/{{city}}">{{city}}</a></li>
+				{{/each}}
 			</ul>
 		</div>
 		<div class="col-md-3">

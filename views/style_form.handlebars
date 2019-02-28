@@ -1,27 +1,26 @@
 <div class="container content pt-3">
 	<h1 class="display-4">
-		{{#if id}}Update <a href="/styles/id">Style name</a>
-		{{else}}Add a style{{/if}}
-	</h1>
-	<form>
+	{{#if id}}
+	<h1><Update <a href="/styles/{{style.id}}">{{style.name}}</a></h1>
+	<form action="/styles/{{style.id}}" method="POST">
 		<div class="form-row">
 			<div class="form-group col-md-6">
 				<label for="name">Style name</label>
-					<input type="text" class="form-control" id="name" value="{{name}}">
+					<input type="text" class="form-control" id="name" name="name" value="{{style.name}}">
 			</div>
 			<div class="form-group col-md-3">
 				<label for="abv">ABV range</label>
-					<input type="text" class="form-control" id="abv" placeholder="(ex. 3.0% - 5.0%)" value="{{abv}}">
+					<input type="text" class="form-control" id="abv" name="abv_range" value={{style.abv_range}}>
 			</div>
 			<div class="form-group col-md-3">
 				<label for="abv">IBU range</label>
-					<input type="text" class="form-control" id="abv" placeholder="(ex. 30 - 50)" value="{{ibu}}">
+					<input type="text" class="form-control" id="abv" name="ibu_range" value="{{style.ibu_range}}">
 			</div>
 		</div>
 		<div class="form-row">
 			<div class="form-group col-12">
 				<label for="comments">Description</label>
-				<textarea class="form-control" id="comments" rows="3" maxlength="300">{{description}}</textarea>
+				<textarea class="form-control" id="comments" rows="3" maxlength="300" name="description">{{style.description}}</textarea>
 			</div>
 		</div>
 		<div class="form-row">
@@ -33,4 +32,37 @@
 			</div>
 		</div>
 	</form>
+	{{else}}Add a style
+	</h1>Add a style</h1>
+	<form action="/styles" method="POST">
+		<div class="form-row">
+			<div class="form-group col-md-6">
+				<label for="name">Style name</label>
+					<input type="text" class="form-control" id="name" name="name">
+			</div>
+			<div class="form-group col-md-3">
+				<label for="abv">ABV range</label>
+					<input type="text" class="form-control" id="abv" name="abv_range" placeholder="(ex. 3.0% - 5.0%)">
+			</div>
+			<div class="form-group col-md-3">
+				<label for="abv">IBU range</label>
+					<input type="text" class="form-control" id="abv" name="ibu_range" placeholder="(ex. 30 - 50)">
+			</div>
+		</div>
+		<div class="form-row">
+			<div class="form-group col-12">
+				<label for="comments">Description</label>
+				<textarea class="form-control" id="comments" rows="3" maxlength="300" name="description"></textarea>
+			</div>
+		</div>
+		<div class="form-row">
+			<div class="form-group col-12">
+			<button type="submit" class="btn btn-primary">
+				{{#if id}}Update style
+				{{else}}Add style{{/if}}
+			</button>
+			</div>
+		</div>
+	</form>
+	{{/if}}
 </div>

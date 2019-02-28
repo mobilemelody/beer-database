@@ -24,8 +24,8 @@
 			{{#each beers}}
 			<tr>
 				<td>{{inc @index}}</td>
-				<td><a href="/beers/id">{{name}}</a></td>
-				<td><a href="/styles/id">{{style}}</a></td>
+				<td><a href="/beers/{{id}}">{{name}}</a></td>
+				<td><a href="/styles/{{style_id}}">{{style}}</a></td>
 				<td>{{avg_rating}}</td>
 				<td>{{num_reviews}}</td>
 			</tr>

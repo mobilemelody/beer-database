@@ -38,7 +38,7 @@ function selectBrewery(res, mysql, context, id, complete) {
 }
 
 function getBeers(res, mysql, context, id, complete) {
-  var sql = "SELECT beer.id AS id, beer.name AS name, style.name AS style, AVG(review.rating) AS avg_rating, COUNT(review.rating) AS num_reviews FROM beer INNER JOIN style ON beer.style=style.id LEFT JOIN review ON beer.id=review.beer WHERE beer.brewery=? GROUP BY beer.id ORDER BY avg_rating DESC";
+  var sql = "SELECT beer.id AS id, beer.name AS name, style.id AS style_id, style.name AS style, AVG(review.rating) AS avg_rating, COUNT(review.rating) AS num_reviews FROM beer INNER JOIN style ON beer.style=style.id LEFT JOIN review ON beer.id=review.beer WHERE beer.brewery=? GROUP BY beer.id ORDER BY avg_rating DESC";
   var inserts = [id];
   mysql.pool.query(sql, inserts, function(error, results, fields) {
     if(error) {

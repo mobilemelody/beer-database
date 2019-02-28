@@ -1,2 +1,6 @@
 node_modules/
 .env
+.env.template
+dbcon.js
+package-lock.json
+package.json

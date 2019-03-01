@@ -80,17 +80,19 @@ SELECT id, name FROM style ORDER BY name ASC
 
 /* STYLE PAGES */
 -- Select all styles, list alphabetically and show number of beers per style
-SELECT style.id, style.name, COUNT(beer.id)
+SELECT style.id AS id, style.name AS name, COUNT(beer.id) AS count
 FROM style 
 LEFT JOIN beer ON style.id=beer.style
 GROUP BY style.id
 ORDER BY style.name ASC
 
 -- Select individual style
-SELECT * FROM style WHERE id=:idInput
+SELECT style.id AS id, style.name AS name, style.abv_range AS abv_range, style.ibu_range AS ibu_range, style.description AS description
+FROM style
+WHERE id=:idInput
 
 -- Select all beers for a single style sorted by average rating
-SELECT beer.id, beer.name, brewery.id, brewery.name, AVG(review.rating) AS avg_rating, COUNT(review.rating) AS num_reviews
+SELECT beer.id AS id, beer.name AS name, brewery.id AS brewery_id, brewery.name AS brewery, AVG(review.rating) AS avg_rating, COUNT(review.rating) AS num_reviews
 FROM beer
 INNER JOIN brewery ON beer.brewery=brewery.id
 LEFT JOIN review ON beer.id=review.beer
@@ -100,7 +102,7 @@ ORDER BY avg_rating DESC
 
 /* BREWERY PAGES */
 -- Select all breweries sorted by average beer rating
-SELECT brewery.id, brewery.name, AVG(review.rating) AS avg_rating, COUNT(beer.id) AS num_reviews
+SELECT brewery.id AS id, brewery.name AS name, AVG(review.rating) AS avg_rating, COUNT(beer.id) AS num_beers 
 FROM brewery
 LEFT JOIN beer ON brewery.id=beer.brewery
 LEFT JOIN review ON beer.id=review.beer
@@ -108,13 +110,13 @@ GROUP BY brewery.id
 ORDER BY avg_rating DESC
 
 -- Select individual brewery
-SELECT brewery.id, brewery.name, brewery.city, brewery.state, country.name 
+SELECT brewery.id AS id, brewery.name AS name, brewery.city AS city, brewery.state AS state, country.id AS c_id, country.name AS country
 FROM brewery
 INNER JOIN country ON brewery.country=country.id
 WHERE brewery.id=:idInput
 
 -- Select all beers for a single brewery sorted by average rating
-SELECT beer.id, beer.name, style.id, style.name, AVG(review.rating) AS avg_rating, COUNT(review.rating) AS num_reviews
+SELECT beer.id AS id, beer.name AS name, style.id AS style_id, style.name AS style, AVG(review.rating) AS avg_rating, COUNT(review.rating) AS num_reviews
 FROM beer
 INNER JOIN style ON beer.style=style.id
 LEFT JOIN review ON beer.id=review.beer
@@ -123,7 +125,7 @@ GROUP BY beer.id
 ORDER BY avg_rating DESC
 
 -- Select all countries sorted alphabetically for dropdown in brewery form
-SELECT * FROM country
+SELECT country.id AS country_id, country.name AS country_name FROM country
 
 /* VENUE PAGES */
 -- Select all cities and states

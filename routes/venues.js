@@ -7,14 +7,33 @@ const router = express.Router();
 
 /* Get unique cities and states for venues */
 function getCities(res, mysql, context, complete) {
-  let sql = "SELECT DISTINCT state, city FROM venue ORDER BY state, city";
+  let sql = "SELECT DISTINCT state FROM venue ORDER BY state";
   mysql.pool.query(sql, function(error, results, fields) {
     if(error) {
       res.write(JSON.stringify(error));
       res.end();
     }
-    context.cities = results;
-    complete();
+    context.states = results;
+    sql = "SELECT DISTINCT city FROM venue WHERE state=? ORDER BY city";
+    let localCallbackCount = 0;
+    for (let i in context.states) {
+      let inserts = [context.states[i].state];
+      mysql.pool.query(sql, inserts, function(error, results, fields) {
+        if(error) {
+          res.write(JSON.stringify(error));
+          res.end();
+        }
+        context.states[i].cities = results;
+        localComplete();
+      });
+    }
+    function localComplete() {
+      localCallbackCount++;
+      console.log(context.states);
+      if (localCallbackCount >= context.states.length) {
+        complete();
+      }
+    }
   });
 }
 

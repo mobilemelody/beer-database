@@ -118,11 +118,14 @@
 	<h1 class="display-4">Venues</h1>
 	<div class="row">
 		<div class="col-md-9">
+			{{#each states}}
+			<h3><a href="/venues/state/{{state}}">{{state}}</a></h3>
 			<ul>
 				{{#each cities}}
-				<li><a href="/venues/state/{{state}}">{{state}}</a>, <a href="/venues/state/{{state}}/city/{{city}}">{{city}}</a></li>
+				<li><a href="/venues/state/{{../state}}/city/{{city}}">{{city}}</a></li>
 				{{/each}}
 			</ul>
+			{{/each}}
 		</div>
 		<div class="col-md-3">
 			<a href="/venues/add" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i> Add a venue</a>

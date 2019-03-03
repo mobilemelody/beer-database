@@ -29,7 +29,6 @@ function getCities(res, mysql, context, complete) {
     }
     function localComplete() {
       localCallbackCount++;
-      console.log(context.states);
       if (localCallbackCount >= context.states.length) {
         complete();
       }
@@ -92,8 +91,8 @@ function getVenueTaplist(req, res, mysql, context, complete) {
     complete();
   });
 
-  sql = "SELECT * FROM beer ORDER BY name ASC";
-  mysql.pool.query(sql, function(error, results, fields) {
+  sql = "SELECT * FROM beer WHERE id NOT IN (SELECT beer FROM beer_venue WHERE venue=?) ORDER BY name ASC";
+  mysql.pool.query(sql, inserts, function(error, results, fields) {
     if(error) {
       res.write(JSON.stringify(error));
       res.end();
@@ -243,8 +242,36 @@ router.post('/:id/taplist/add',function(req,res,next) {
   });
 });
 
-/* TODO: Route to remove a beer from a venue's taplist */
+/* Route to remove a beer from a venue's taplist */
+router.delete('/:id/tap/:beer',function(req,res,next) {
+  let mysql = req.app.get('mysql');
+  let sql = "DELETE FROM beer_venue WHERE venue=? AND beer=?";
+  let inserts = [req.params.id, req.params.beer];
+  sql = mysql.pool.query(sql, inserts, function(error, results, fields) {
+    if(error) {
+      res.write(JSON.stringify(error));
+      res.end();
+    }
+    else {
+      res.status(202).end();
+    }
+  });
+});
 
-/* TODO: Route to delete a venue */
+/* Route to delete a venue */
+router.delete('/:id',function(req,res,next) {
+  let mysql = req.app.get('mysql');
+  let sql = "DELETE FROM venue WHERE id=?";
+  let inserts = [req.params.id];
+  sql = mysql.pool.query(sql, inserts, function(error, results, fields) {
+    if(error) {
+      res.write(JSON.stringify(error));
+      res.end();
+    }
+    else {
+      res.status(202).end();
+    }
+  });
+});
 
 module.exports = router;

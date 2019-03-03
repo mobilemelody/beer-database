@@ -11,7 +11,7 @@
 		<div class="col-md-9">
 			<div class="brewery lead">
 				<a href="/breweries/{{beer.brewery_id}}">{{beer.brewery}}</a>
-				<small class="text-muted">({{beer.city}}, {{beer.state}}, {{beer.country}})</small>
+				<small class="text-muted">({{#if beer.city}}{{beer.city}}, {{/if}}{{#if beer.state}}{{beer.state}}, {{/if}}{{beer.country}})</small>
 			</div>
 			<div class="style">
 				Style: <a href="/styles/{{beer.style_id}}">{{beer.style}}</a>

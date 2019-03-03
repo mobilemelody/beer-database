@@ -161,8 +161,8 @@ WHERE beer_venue.venue=:venueInput
 GROUP BY beer.id
 ORDER BY beer.name ASC
 
--- Select all beers sorted alphabetically for dropdown in adding to taplist
-SELECT * FROM beer ORDER BY name ASC
+-- Select all beers no already in taplist sorted alphabetically for dropdown to add to taplist
+SELECT * FROM beer WHERE id NOT IN (SELECT beer FROM beer_venue WHERE venue=?) ORDER BY name ASC
 
 /* REVIEW PAGE */
 -- Selects 10 most recent reviews

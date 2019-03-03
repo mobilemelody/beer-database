@@ -269,8 +269,20 @@ router.post('/:id/reviews',function(req,res,next) {
   });
 });
 
-/* TODO: Route to delete beer */
+/* Route to delete beer */
 router.delete('/:id',function(req,res,next) {
+  let mysql = req.app.get('mysql');
+  let sql = "DELETE FROM beer WHERE id=?";
+  let inserts = [req.params.id];
+  sql = mysql.pool.query(sql, inserts, function(error, results, fields) {
+    if(error) {
+      res.write(JSON.stringify(error));
+      res.end();
+    }
+    else {
+      res.status(202).end();
+    }
+  });
 });
 
 module.exports = router;

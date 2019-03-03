@@ -31,7 +31,7 @@
 				<td><a href="/styles/{{style_id}}">{{style}}</a></td>
 				<td>{{avg_rating}}</td>
 				<td>{{num_reviews}}</td>
-				<td><button class="btn btn-link text-secondary"><i class="far fa-trash-alt"></i></button></td>
+				<td><button class="btn btn-link text-secondary" onclick="deleteTap({{../id}}, {{beer_id}})"><i class="far fa-trash-alt"></i></button></td>
 			</tr>
 			{{/each}}
 		</tbody>
@@ -48,6 +48,7 @@
 	</form>
 	<small class="form-text text-muted">Beer not listed? <a href="/beers/add">Click here</a> to add the beer first</small>
 </div>
+<script src="/js/deleteTap.js"></script>
 
 {{else if city}}
 <div class="container content pt-3">

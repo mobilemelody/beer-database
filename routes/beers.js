@@ -195,23 +195,6 @@ router.get('/:id/edit',function(req,res,next) {
   function complete() {
     callbackCount++;
     if(callbackCount >= 3) {
-      /* Add selected flags */
-      for (let i = 0; i < context.breweries.length; i++) {
-        if (context.breweries[i].id == context.beer.brewery_id) {
-          context.breweries[i].selected = true;
-        }
-        else {
-          context.breweries[i].selected = false;
-        }
-      }
-      for (let i = 0; i < context.styles.length; i++) {
-        if (context.styles[i].id == context.beer.style_id) {
-          context.styles[i].selected = true;
-        }
-        else {
-          context.styles[i].selected = false;
-        }
-      }
       res.render('beer_form', context);
     }
   }

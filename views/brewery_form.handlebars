@@ -12,7 +12,7 @@
 				<select class="form-control country-select" name="country" required>
 					<option value="">Choose One</option>
 					{{#each country}}
-					<option value="{{country_id}}" {{#if selected}}selected{{/if}}>{{country_name}}</option>
+					<option value="{{country_id}}" {{#ifEq country_id ../brewery.c_id}}selected{{/ifEq}}>{{country_name}}</option>
 					{{/each}}
 				</select>
 			</div>

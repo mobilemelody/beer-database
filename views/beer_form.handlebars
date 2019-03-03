@@ -14,7 +14,7 @@
 				<select class="form-control brewery-select" id="brewery" name="brewery" required>
 					<option value="">Choose one</option>
 					{{#each breweries}}
-					<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>
+					<option value="{{id}}" {{#ifEq id ../beer.brewery_id}}selected{{/ifEq}}>{{name}}</option>
 					{{/each}}
 				</select>
 				<small class="form-text text-muted">Brewery not listed? <a href="/breweries/add">Click here</a> to add the brewery first</small>
@@ -26,7 +26,7 @@
 				<select class="form-control style-select" id="style" name="style" required>
 					<option value="">Choose one</option>
 					{{#each styles}}
-					<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>
+					<option value="{{id}}" {{#ifEq id ../beer.style_id}}selected{{/ifEq}}>{{name}}</option>
 					{{/each}}
 				</select>
 				<small class="form-text text-muted">Style not listed? <a href="/styles/add">Click here</a> to add the style first</small>

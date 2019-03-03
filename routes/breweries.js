@@ -120,15 +120,6 @@ router.get('/:id/edit',function(req,res,next) {
   function complete() {
     callbackCount++;
     if(callbackCount >= 2) {
-      for (let i = 0; i < context.country.length; i++) {
-        if (context.country[i].country_id == context.brewery.c_id) {
-          context.country[i].selected = true;
-        }
-        else {
-          context.country[i].selected = false;
-        }
-      }
-      console.log(context.country);
       res.render('brewery_form', context);
     }
   }

@@ -7,7 +7,7 @@
 		</div>
 	</div>
 	<div class="brewery-info text-muted pb-3">
-		{{venue.address}}, {{venue.city}}, {{venue.state}}
+		{{#if venue.address}}{{venue.address}}, {{/if}}{{venue.city}}, {{venue.state}}
 	</div>
 	<h2>Beers</h2>
 	<table class="table beer-table">

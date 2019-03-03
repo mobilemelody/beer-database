@@ -32,7 +32,7 @@
 			<div class="review-info row">
 				<div class="col-9">
 					<div class="review-user text-bold">{{#if user_id}}<a href="/users/{{user_id}}">{{user_name}}</a>{{else}}Anonymous{{/if}}</div>
-					<div class="review-date text-muted"><small>{{rev_date}}</small></div>
+					<div class="review-date text-muted"><small>{{formatDate rev_date}}</small></div>
 				</div>
 				<div class="user-rating col-3 text-right"><i class="fas fa-star rating-star"></i> {{decimal rating}}</div>
 			</div>

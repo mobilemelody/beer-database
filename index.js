@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const mysql = require('./dbcon.js');
 const bodyParser = require('body-parser');
+const moment = require('moment');
 const handlebars = require('express-handlebars').create({
   defaultLayout:'main', 
   helpers: {
@@ -19,6 +20,9 @@ const handlebars = require('express-handlebars').create({
         return options.fn(this);
       }
       return options.inverse(this);
+    },
+    formatDate: function(value) {
+      return moment(value).format("MMM D, YYYY");
     }
   }
 });

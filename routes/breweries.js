@@ -1,7 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
-/* Queries for beer pages */
+/*****************************/
+/* QUERIES FOR BREWERY PAGES */
+/*****************************/
+
+/* Get all breweries */
 function getBreweries(res, mysql, context, complete) {
   mysql.pool.query("SELECT brewery.id AS id, brewery.name AS name, AVG(review.rating) AS avg_rating, COUNT(beer.id) AS num_beers FROM brewery LEFT JOIN beer ON brewery.id=beer.brewery LEFT JOIN review ON beer.id=review.beer GROUP BY brewery.id ORDER BY avg_rating DESC", function(error, results, fields) {
     if(error) {
@@ -13,6 +17,7 @@ function getBreweries(res, mysql, context, complete) {
   });
 }
 
+/* Get countries for dropdown */
 function getCountries(res, mysql, context, complete) {
   mysql.pool.query("SELECT country.id AS country_id, country.name AS country_name FROM country", function(error, results, fields) {
     if(error) {
@@ -24,6 +29,7 @@ function getCountries(res, mysql, context, complete) {
   });
 }
 
+/* Get individual brewery */
 function selectBrewery(res, mysql, context, id, complete) {
   var sql = "SELECT brewery.id AS id, brewery.name AS name, brewery.city AS city, brewery.state AS state, country.id AS c_id, country.name AS country FROM brewery INNER JOIN country ON brewery.country=country.id WHERE brewery.id=?";
   var inserts = [id];
@@ -37,6 +43,7 @@ function selectBrewery(res, mysql, context, id, complete) {
   });
 }
 
+/* Get beers for brewery */
 function getBeers(res, mysql, context, id, complete) {
   var sql = "SELECT beer.id AS id, beer.name AS name, style.id AS style_id, style.name AS style, AVG(review.rating) AS avg_rating, COUNT(review.rating) AS num_reviews FROM beer INNER JOIN style ON beer.style=style.id LEFT JOIN review ON beer.id=review.beer WHERE beer.brewery=? GROUP BY beer.id ORDER BY avg_rating DESC";
   var inserts = [id];
@@ -50,7 +57,11 @@ function getBeers(res, mysql, context, id, complete) {
   });
 }
 
-/* Routes for brewery pages */
+/****************************/
+/* ROUTES FOR BREWERY PAGES */
+/****************************/
+
+/* Route for all breweries pages */
 router.get('/',function(req,res,next) {
   let callbackCount = 0;
   let context = {};
@@ -65,6 +76,7 @@ router.get('/',function(req,res,next) {
   }
 });
 
+/* Route for form to add brewery */
 router.get('/add',function(req,res,next) {
   let callbackCount = 0;
   let context = {};
@@ -79,6 +91,7 @@ router.get('/add',function(req,res,next) {
   }
 });
 
+/* Route to show individual brewery */
 router.get('/:id',function(req,res,next) {
   let callbackCount = 0;
   let context = {};
@@ -95,6 +108,7 @@ router.get('/:id',function(req,res,next) {
   }
 });
 
+/* Route to show form to edit brewery */
 router.get('/:id/edit',function(req,res,next) {
   let callbackCount = 0;
   let context = {};
@@ -106,20 +120,12 @@ router.get('/:id/edit',function(req,res,next) {
   function complete() {
     callbackCount++;
     if(callbackCount >= 2) {
-      for (let i = 0; i < context.country.length; i++) {
-        if (context.country[i].country_id == context.brewery.c_id) {
-          context.country[i].selected = true;
-        }
-        else {
-          context.country[i].selected = false;
-        }
-      }
-      console.log(context.country);
       res.render('brewery_form', context);
     }
   }
 });
 
+/* Route to add brewery */
 router.post('/', function(req,res) {
   var mysql = req.app.get('mysql');
   var sql = "INSERT INTO brewery (name, country, city, state) VALUES (?,?,?,?)";
@@ -134,6 +140,7 @@ router.post('/', function(req,res) {
   });
 });
 
+/* Route to edit brewery */
 router.post('/:id', function(req,res) {
   var mysql = req.app.get('mysql');
   var sql = "UPDATE brewery SET name=?, country=?, city=?, state=? WHERE id=?";

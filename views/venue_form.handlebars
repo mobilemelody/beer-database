@@ -20,8 +20,13 @@
 				<input type="text" class="form-control" id="city" name="city" value="{{venue.city}}" required>
 			</div>
 			<div class="form-group col-lg-6">
-				<label for="state">State/Province/Region</label>
-				<input type="text" class="form-control" id="state" name="state" value="{{venue.state}}" required>
+				<label for="state">State</label>
+				<select class="form-control state-select" name="state" required>
+					<option value="">Choose One</option>
+					{{#each states}}
+					<option value="{{name}}" {{#ifEq name ../venue.state}}selected{{/ifEq}}>{{name}}</option>
+					{{/each}}
+				</select>
 			</div>
 		</div>
 		<div class="form-row">
@@ -31,9 +36,30 @@
 				{{else}}Add venue{{/if}}
 			</button>
 			{{#if id}}
-			<button type="button" class="btn btn-outline-danger">Delete venue</button>
+			<button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#confirmDelete">Delete venue</button>
+			<!-- Confirm delete modal -->
+			<div class="modal" id="confirmDelete" tabindex="-1" role="dialog" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+			        <h3 class="modal-title" id="deleteModalTitle">Delete venue</h3>
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			          <span aria-hidden="true">&times;</span>
+			        </button>
+	      		</div>
+	      		<div class="modal-body">
+	      		Are you sure you want to delete <strong>{{venue.name}}</strong>?
+	      		</div>
+	      		<div class="modal-footer">
+	      			<button type="button" class="btn btn-danger" onclick="deleteVenue({{id}})">Delete</button>
+			        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+			      </div>
+			     </div>
+				</div>
+			</div>
 			{{/if}}
 			</div>
 		</div>
 	</form>
 </div>
+<script src="/js/deleteVenue.js"></script>

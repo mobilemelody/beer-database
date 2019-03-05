@@ -7,14 +7,22 @@ const router = express.Router();
 
 /* Get unique cities and states for venues */
 function getCities(res, mysql, context, complete) {
-  let sql = "SELECT DISTINCT state, city FROM venue ORDER BY state, city";
+  let sql = "SELECT DISTINCT state FROM venue ORDER BY state";
   mysql.pool.query(sql, function(error, results, fields) {
     if(error) {
       res.write(JSON.stringify(error));
-      res.end();
-    }
-    context.cities = results;
-    complete();
+      res.end(); }
+    context.states = results;
+    sql = "SELECT DISTINCT city FROM venue WHERE state=? ORDER BY city";
+    let localCallbackCount = 0;
+    for (let i in context.states) {
+      let inserts = [context.states[i].state];
+      mysql.pool.query(sql, inserts, function(error, results, fields) { if(error) {   res.write(JSON.stringify(error));   res.end(); } context.states[i].cities = results; localComplete();
+      }); }
+    function localComplete() {
+      localCallbackCount++;
+      if (localCallbackCount >= context.states.length) { complete();
+      } }
   });
 }
 
@@ -25,8 +33,7 @@ function getVenuesInState(req, res, mysql, context, complete) {
   mysql.pool.query(sql, inserts, function(error, results, fields) {
     if(error) {
       res.write(JSON.stringify(error));
-      res.end();
-    }
+      res.end(); }
     context.venues = results;
     complete();
   });
@@ -39,8 +46,7 @@ function getVenuesInCity(req, res, mysql, context, complete) {
   mysql.pool.query(sql, inserts, function(error, results, fields) {
     if(error) {
       res.write(JSON.stringify(error));
-      res.end();
-    }
+      res.end(); }
     context.venues = results;
     complete();
   });
@@ -53,8 +59,7 @@ function getVenue(req, res, mysql, context, complete) {
   mysql.pool.query(sql, inserts, function(error, results, fields) {
     if(error) {
       res.write(JSON.stringify(error));
-      res.end();
-    }
+      res.end(); }
     context.venue = results[0];
     complete();
   });
@@ -67,22 +72,78 @@ function getVenueTaplist(req, res, mysql, context, complete) {
   mysql.pool.query(sql, inserts, function(error, results, fields) {
     if(error) {
       res.write(JSON.stringify(error));
-      res.end();
-    }
+      res.end(); }
     context.taplist = results;
     complete();
   });
 
-  sql = "SELECT * FROM beer ORDER BY name ASC";
-  mysql.pool.query(sql, function(error, results, fields) {
+  sql = "SELECT * FROM beer WHERE id NOT IN (SELECT beer FROM beer_venue WHERE venue=?) ORDER BY name ASC";
+  mysql.pool.query(sql, inserts, function(error, results, fields) {
     if(error) {
       res.write(JSON.stringify(error));
-      res.end();
-    }
+      res.end(); }
     context.beers = results;
     complete();
   });
 }
+
+/* Get list of all states */
+/* Modified from https://gist.github.com/mshafrir/2646763 */
+function getStates(context) {
+  context.states = [
+    { "name": "Alabama", "abbreviation": "AL" },
+    { "name": "Alaska", "abbreviation": "AK" },
+    { "name": "Arizona", "abbreviation": "AZ" },
+    { "name": "Arkansas", "abbreviation": "AR" },
+    { "name": "California", "abbreviation": "CA" },
+    { "name": "Colorado", "abbreviation": "CO" },
+    { "name": "Connecticut", "abbreviation": "CT" },
+    { "name": "Delaware", "abbreviation": "DE" },
+    { "name": "Florida", "abbreviation": "FL" },
+    { "name": "Georgia", "abbreviation": "GA" },
+    { "name": "Hawaii", "abbreviation": "HI" },
+    { "name": "Idaho", "abbreviation": "ID" },
+    { "name": "Illinois", "abbreviation": "IL" },
+    { "name": "Indiana", "abbreviation": "IN" },
+    { "name": "Iowa", "abbreviation": "IA" },
+    { "name": "Kansas", "abbreviation": "KS" },
+    { "name": "Kentucky", "abbreviation": "KY" },
+    { "name": "Louisiana", "abbreviation": "LA" },
+    { "name": "Maine", "abbreviation": "ME" },
+    { "name": "Maryland", "abbreviation": "MD" },
+    { "name": "Massachusetts", "abbreviation": "MA" },
+    { "name": "Michigan", "abbreviation": "MI" },
+    { "name": "Minnesota", "abbreviation": "MN" },
+    { "name": "Mississippi", "abbreviation": "MS" },
+    { "name": "Missouri", "abbreviation": "MO" },
+    { "name": "Montana", "abbreviation": "MT" },
+    { "name": "Nebraska", "abbreviation": "NE" },
+    { "name": "Nevada", "abbreviation": "NV" },
+    { "name": "New Hampshire", "abbreviation": "NH" },
+    { "name": "New Jersey", "abbreviation": "NJ" },
+    { "name": "New Mexico", "abbreviation": "NM" },
+    { "name": "New York", "abbreviation": "NY" },
+    { "name": "North Carolina", "abbreviation": "NC" },
+    { "name": "North Dakota", "abbreviation": "ND" },
+    { "name": "Ohio", "abbreviation": "OH" },
+    { "name": "Oklahoma", "abbreviation": "OK" },
+    { "name": "Oregon", "abbreviation": "OR" },
+    { "name": "Pennsylvania", "abbreviation": "PA" },
+    { "name": "Rhode Island", "abbreviation": "RI" },
+    { "name": "South Carolina", "abbreviation": "SC" },
+    { "name": "South Dakota", "abbreviation": "SD" },
+    { "name": "Tennessee", "abbreviation": "TN" },
+    { "name": "Texas", "abbreviation": "TX" },
+    { "name": "Utah", "abbreviation": "UT" },
+    { "name": "Vermont", "abbreviation": "VT" },
+    { "name": "Virginia", "abbreviation": "VA" },
+    { "name": "Washington", "abbreviation": "WA" },
+    { "name": "Washington D.C.", "abbreviation": "DC" },
+    { "name": "West Virginia", "abbreviation": "WV" },
+    { "name": "Wisconsin", "abbreviation": "WI" },
+    { "name": "Wyoming", "abbreviation": "WY" }
+  ];
+  }
 
 /**************************/
 /* ROUTES FOR VENUE PAGES */
@@ -98,8 +159,7 @@ router.get('/',function(req,res,next) {
   function complete() {
     callbackCount++;
     if(callbackCount >= 1) {
-      res.render('venue', context);
-    }
+      res.render('venue', context); }
   }
 });
 
@@ -107,6 +167,7 @@ router.get('/',function(req,res,next) {
 router.get('/add',function(req,res,next) {
   let context = {};
   context.venue_active = true;
+  getStates(context);
   res.render('venue_form', context);
 });
 
@@ -118,11 +179,9 @@ router.post('/add',function(req,res,next) {
   sql = mysql.pool.query(sql, inserts, function(error, results, fields) {
     if(error) {
       res.write(JSON.stringify(error));
-      res.end();
-    }
+      res.end(); }
     else {
-      res.redirect('/venues');
-    }
+      res.redirect('/venues'); }
   });
 });
 
@@ -137,8 +196,7 @@ router.get('/state/:state',function(req,res,next) {
   function complete() {
     callbackCount++;
     if(callbackCount >= 1) {
-      res.render('venue', context);
-    }
+      res.render('venue', context); }
   }
 });
 
@@ -154,8 +212,7 @@ router.get('/state/:state/city/:city',function(req,res,next) {
   function complete() {
     callbackCount++;
     if(callbackCount >= 1) {
-      res.render('venue', context);
-    }
+      res.render('venue', context); }
   }
 });
 
@@ -171,8 +228,7 @@ router.get('/:id',function(req,res,next) {
   function complete() {
     callbackCount++;
     if(callbackCount >= 3) {
-      res.render('venue', context);
-    }
+      res.render('venue', context); }
   }
 });
 
@@ -184,11 +240,11 @@ router.get('/:id/edit',function(req,res,next) {
   context.venue_active = true;
   context.id = req.params.id;
   getVenue(req, res, mysql, context, complete);
+  getStates(context);
   function complete() {
     callbackCount++;
     if(callbackCount >= 1) {
-      res.render('venue_form', context);
-    }
+      res.render('venue_form', context); }
   }
 });
 
@@ -200,11 +256,9 @@ router.post('/:id/edit',function(req,res,next) {
   sql = mysql.pool.query(sql, inserts, function(error, results, fields) {
     if(error) {
       res.write(JSON.stringify(error));
-      res.end();
-    }
+      res.end(); }
     else {
-      res.redirect('/venues/' + req.params.id);
-    }
+      res.redirect('/venues/' + req.params.id); }
   });
 });
 
@@ -216,16 +270,38 @@ router.post('/:id/taplist/add',function(req,res,next) {
   sql = mysql.pool.query(sql, inserts, function(error, results, fields) {
     if(error) {
       res.write(JSON.stringify(error));
-      res.end();
-    }
+      res.end(); }
     else {
-      res.redirect('/venues/' + req.params.id);
-    }
+      res.redirect('/venues/' + req.params.id); }
   });
 });
 
-/* TODO: Route to remove a beer from a venue's taplist */
+/* Route to remove a beer from a venue's taplist */
+router.delete('/:id/tap/:beer',function(req,res,next) {
+  let mysql = req.app.get('mysql');
+  let sql = "DELETE FROM beer_venue WHERE venue=? AND beer=?";
+  let inserts = [req.params.id, req.params.beer];
+  sql = mysql.pool.query(sql, inserts, function(error, results, fields) {
+    if(error) {
+      res.write(JSON.stringify(error));
+      res.end(); }
+    else {
+      res.status(202).end(); }
+  });
+});
 
-/* TODO: Route to delete a venue */
+/* Route to delete a venue */
+router.delete('/:id',function(req,res,next) {
+  let mysql = req.app.get('mysql');
+  let sql = "DELETE FROM venue WHERE id=?";
+  let inserts = [req.params.id];
+  sql = mysql.pool.query(sql, inserts, function(error, results, fields) {
+    if(error) {
+      res.write(JSON.stringify(error));
+      res.end(); }
+    else {
+      res.status(202).end(); }
+  });
+});
 
 module.exports = router;

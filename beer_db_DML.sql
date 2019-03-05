@@ -173,6 +173,13 @@ LEFT JOIN db_user ON review.user_name=db_user.id
 ORDER BY rev_date 
 DESC LIMIT 10
 
+-- Select an individual review
+SELECT review.id AS id, beer.name AS beer, db_user.user_name AS username, review.rev_date AS rev_date, review.rating AS rating, review.comments AS comments
+FROM review 
+INNER JOIN beer ON review.beer=beer.id
+LEFT JOIN db_user ON review.user_name=db_user.id
+WHERE review.id=:idInput
+
 /* USER PAGES */
 -- Select all users sorted by number of reviews
 SELECT db_user.id AS user_id, db_user.user_name AS user_name, COUNT(review.id) AS num_reviews
@@ -222,6 +229,14 @@ UPDATE venue SET name=:nameInput,
                 state=:stateInput
     WHERE id=:idInput
 
+-- Update a review
+UPDATE review SET user_name=:usernameInput,
+                beer=:beerInput,
+                rev_date=:revdateInput,
+                rating=:ratingInput,
+                comments=:commentsInput
+    WHERE id=:idInput
+
 /* DELETE QUERIES */
 -- Remove a beer from the db
 DELETE FROM beer WHERE id=:idInput
@@ -231,3 +246,6 @@ DELETE FROM venue WHERE id=:idInput
 
 -- Remove a beer from a venue
 DELETE FROM beer_venue WHERE beer=:beerInput AND venue=:venueInput
+
+-- Remove a review from the db
+DELETE FROM review WHERE id=:idInput

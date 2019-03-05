@@ -6,7 +6,7 @@ function deleteReview(id){
             if(result.responseText != undefined) {
                 alert(result.responseText);
             } else {
-                window.location.reload(true);
+                window.location.assign('/reviews');
             }
         }
     })

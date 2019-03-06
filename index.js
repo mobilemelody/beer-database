@@ -23,6 +23,15 @@ const handlebars = require('express-handlebars').create({
     },
     formatDate: function(value) {
       return moment(value).format("MMM D, YYYY");
+    },
+    //Found below code at: https://stackoverflow.com/questions/26066768/how-to-set-the-selected-item-in-a-radio-button-group-in-handlebars-template
+    //Causes the star radios to return the amount selected based off of the review rating for a beer
+    setChecked: function (value, currentValue) {
+      if ( value == currentValue ) {
+         return "checked";
+      } else {
+         return "";
+      }
     }
   }
 });

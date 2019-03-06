@@ -54,7 +54,7 @@ GROUP BY beer.id
 ORDER BY avg_rating DESC
 
 -- Select individual beer
-SELECT beer.name AS name, brewery.id AS brewery_id, brewery.name AS brewery, country.name AS country, brewery.city AS city, brewery.state AS state, style.id AS style_id, style.name AS style, beer.abv AS abv, beer.ibu AS ibu, AVG(review.rating) AS avg_rating, COUNT(review.rating) AS num_reviews 
+SELECT beer.id AS id, beer.name AS name, brewery.id AS brewery_id, brewery.name AS brewery, country.name AS country, brewery.city AS city, brewery.state AS state, style.id AS style_id, style.name AS style, beer.abv AS abv, beer.ibu AS ibu, AVG(review.rating) AS avg_rating, COUNT(review.rating) AS num_reviews 
 FROM beer 
 INNER JOIN brewery ON beer.brewery=brewery.id 
 INNER JOIN country ON brewery.country=country.id
@@ -64,10 +64,16 @@ WHERE beer.id = :idInput
 GROUP BY beer.id
 
 -- Select reviews for individual beer
-SELECT review.user_name AS user_id, review.rev_date, review.rating, review.comments, db_user.user_name AS user_name 
-FROM review 
+SELECT review.user_name AS user_id, review.id AS rev_id, review.rev_date, review.rating, review.comments, db_user.user_name AS user_name FROM review 
 LEFT JOIN db_user ON review.user_name=db_user.id 
-WHERE beer = :beerInput
+WHERE beer =:beerInput
+
+-- Select an individual review for a beer
+SELECT review.id AS id, beer.name AS beer, db_user.user_name AS username, review.rev_date AS rev_date, review.rating AS rating, review.comments AS comments
+FROM review 
+INNER JOIN beer ON review.beer=beer.id
+LEFT JOIN db_user ON review.user_name=db_user.id
+WHERE review.id=:idInput
 
 -- Select all users sorted alphabetically for dropdown in reviews form
 SELECT id, user_name FROM db_user ORDER BY user_name ASC
@@ -166,19 +172,15 @@ SELECT * FROM beer WHERE id NOT IN (SELECT beer FROM beer_venue WHERE venue=?) O
 
 /* REVIEW PAGE */
 -- Selects 10 most recent reviews
-SELECT beer.name AS beer, db_user.user_name AS username, review.rev_date AS rev_date, review.rating AS rating, review.comments AS comments
+\SELECT beer.id AS beer_id, beer.name AS beer, db_user.id AS user_id, db_user.user_name AS username, review.id AS rev_id, review.user_name AS rev_user, review.rev_date AS rev_date, review.rating AS rating, review.comments AS comments 
 FROM review 
-INNER JOIN beer ON review.beer=beer.id
-LEFT JOIN db_user ON review.user_name=db_user.id
+INNER JOIN beer ON review.beer=beer.id 
+LEFT JOIN db_user ON review.user_name=db_user.id 
 ORDER BY rev_date 
 DESC LIMIT 10
 
--- Select an individual review
-SELECT review.id AS id, beer.name AS beer, db_user.user_name AS username, review.rev_date AS rev_date, review.rating AS rating, review.comments AS comments
-FROM review 
-INNER JOIN beer ON review.beer=beer.id
-LEFT JOIN db_user ON review.user_name=db_user.id
-WHERE review.id=:idInput
+-- Update contents of a review for a beer
+UPDATE review SET user_name=:user_nameInput, rev_date=:rev_dateInput, rating=:ratingInput, comments=:commentsInput WHERE id=:idInput
 
 /* USER PAGES */
 -- Select all users sorted by number of reviews

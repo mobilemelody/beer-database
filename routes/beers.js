@@ -33,7 +33,7 @@ function getSearchResults(req, res, mysql, context, complete) {
 
 /* Get individual beer */
 function getBeer(req, res, mysql, context, complete) {
-  let sql = "SELECT beer.name AS name, brewery.id AS brewery_id, brewery.name AS brewery, country.name AS country, brewery.city AS city, brewery.state AS state, style.id AS style_id, style.name AS style, beer.abv AS abv, beer.ibu AS ibu, AVG(review.rating) AS avg_rating, COUNT(review.rating) AS num_reviews FROM beer INNER JOIN brewery ON beer.brewery=brewery.id INNER JOIN country ON brewery.country=country.id INNER JOIN style ON beer.style=style.id LEFT JOIN review ON beer.id=review.beer WHERE beer.id = ? GROUP BY beer.id";
+  let sql = "SELECT beer.id AS id, beer.name AS name, brewery.id AS brewery_id, brewery.name AS brewery, country.name AS country, brewery.city AS city, brewery.state AS state, style.id AS style_id, style.name AS style, beer.abv AS abv, beer.ibu AS ibu, AVG(review.rating) AS avg_rating, COUNT(review.rating) AS num_reviews FROM beer INNER JOIN brewery ON beer.brewery=brewery.id INNER JOIN country ON brewery.country=country.id INNER JOIN style ON beer.style=style.id LEFT JOIN review ON beer.id=review.beer WHERE beer.id = ? GROUP BY beer.id";
   let inserts = [req.params.id];
   mysql.pool.query(sql, inserts, function(error, results, fields) {
     if(error) {
@@ -41,13 +41,14 @@ function getBeer(req, res, mysql, context, complete) {
       res.end();
     }
     context.beer = results[0];
+    console.log(context.beer);
     complete();
   })
 }
 
 /* Get reviews for a beer */
 function getReviewsOfBeer(req, res, mysql, context, complete) {
-  let sql = "SELECT review.user_name AS user_id, review.rev_date, review.rating, review.comments, db_user.user_name AS user_name FROM review LEFT JOIN db_user ON review.user_name=db_user.id WHERE beer = ?";
+  let sql = "SELECT review.user_name AS user_id, review.id AS rev_id, review.rev_date, review.rating, review.comments, db_user.user_name AS user_name FROM review LEFT JOIN db_user ON review.user_name=db_user.id WHERE beer = ?";
   let inserts = [req.params.id];
   mysql.pool.query(sql, inserts, function(error, results, fields) {
     if(error) {
@@ -55,6 +56,7 @@ function getReviewsOfBeer(req, res, mysql, context, complete) {
       res.end();
     }
     context.reviews = results;
+    console.log(context.reviews);
     complete();
   })
 }
@@ -94,8 +96,24 @@ function getUsers(res, mysql, context, complete) {
       res.end();
     }
     context.users = results;
+    console.log(context.users);
     complete();
   })
+}
+
+/* Get individual review for a beer*/
+function selectReview(req, res, mysql, context, complete) {
+  var sql = "SELECT review.id, beer.name AS beer, db_user.user_name AS username, db_user.id AS user_id, review.rev_date AS rev_date, review.rating AS rating, review.comments AS comments FROM review INNER JOIN beer ON review.beer=beer.id LEFT JOIN db_user ON review.user_name=db_user.id WHERE review.id=?";
+  var inserts = [req.params.revid];
+  mysql.pool.query(sql, inserts, function(error, results, fields) {
+    if(error) {
+      res.write(JSON.stringify(error));
+      res.end();
+    }
+    context.review = results[0];
+    console.log(context.review);
+    complete();
+  });
 }
 
 /*************************/
@@ -233,6 +251,25 @@ router.get('/:id/reviews/add',function(req,res,next) {
   }
 });
 
+/* Route to show form for editing a review */
+router.get('/:beerid/reviews/:revid/edit',function(req,res,next) {
+  let callbackCount = 0;
+  let context = {};
+  let mysql = req.app.get('mysql');
+  context.beer_active = true;
+  context.id = req.params.beerid;
+  context.rev_id = req.params.revid;
+  getBeer(req, res, mysql, context, complete);
+  getUsers(res, mysql, context, complete);
+  selectReview(req, res, mysql, context, complete);
+  function complete() {
+    callbackCount++;
+    if(callbackCount >= 3) {
+      res.render('review_form', context);
+    }
+  }
+});
+
 /* Route to add a review */
 router.post('/:id/reviews',function(req,res,next) {
   let mysql = req.app.get('mysql');
@@ -249,6 +286,22 @@ router.post('/:id/reviews',function(req,res,next) {
     else {
       res.redirect('/beers/' + req.params.id);
     }
+  });
+});
+
+/* Route to edit a review for a beer */
+router.post('/:id/reviews/:rev_id', function(req,res) {
+  var mysql = req.app.get('mysql');
+  var sql = "UPDATE review SET user_name=?, rev_date=?, rating=?, comments=? WHERE id=?";
+  var inserts = [req.body.user, req.body.date, req.body.rating, req.body.comments, req.params.rev_id];
+  sql = mysql.pool.query(sql,inserts,function(error, results, fields){
+      if(error){
+        res.write(JSON.stringify(error));
+        res.end();
+      }else{
+        console.log(inserts);
+        res.redirect('/beers/' + req.params.id);
+      }
   });
 });
 

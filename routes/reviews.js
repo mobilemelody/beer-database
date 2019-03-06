@@ -7,7 +7,7 @@ const router = express.Router();
 
 /* Get 10 most recent reviews */
 function getRecentReviews(res, mysql, context, complete) {
-  let sql = "SELECT beer.id AS beer_id, beer.name AS beer, db_user.id AS user_id, db_user.user_name AS username, review.rev_date AS rev_date, review.rating AS rating, review.comments AS comments FROM review INNER JOIN beer ON review.beer=beer.id LEFT JOIN db_user ON review.user_name=db_user.id ORDER BY rev_date DESC LIMIT 10";
+  let sql = "SELECT beer.id AS beer_id, beer.name AS beer, db_user.id AS user_id, db_user.user_name AS username, review.id AS rev_id, review.user_name AS rev_user, review.rev_date AS rev_date, review.rating AS rating, review.comments AS comments FROM review INNER JOIN beer ON review.beer=beer.id LEFT JOIN db_user ON review.user_name=db_user.id ORDER BY rev_date DESC LIMIT 10";
   mysql.pool.query(sql, function(error, results, fields) {
     if(error) {
       res.write(JSON.stringify(error));
@@ -45,8 +45,9 @@ router.delete('/:id',function(req,res,next) {
   sql=mysql.pool.query(sql, inserts, function(error, results, fields){
     if(error){
       res.write(JSON.stringify(error));
-      res.status(400);
       res.end();
+    } else {
+      res.status(202).end();
     }
   })
 });

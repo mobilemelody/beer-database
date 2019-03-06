@@ -1,5 +1,76 @@
 <div class="container content pt-3">
-	<h1 class="display-4">Add a review for <a href="/beers/{{id}}">{{beer.name}}</a></h1>
+	{{#if review.id}}
+	<h1 class="display-4"></h1>Edit this review</h1>
+	<form id="reviewForm" action="/beers/{{id}}/reviews/{{review.id}}" method="post">
+		<div class="form-row">
+			<div class="form-group col-md-6">
+				<label for="user">User</label>
+					<select class="form-control" id="user" name="user">
+						<option value="">Anonymous</option>
+						{{#each users}}
+							<option value="{{id}}" {{#ifEq id ../review.user_id}}selected{{/ifEq}}>{{user_name}}</option>
+						{{/each}}
+					</select>
+					<small class="form-text text-muted"><a href="/users/add">Click here</a> to add yourself as a user</small>
+			</div>
+			<div class="form-group col-md-6">
+				<label for="date">Date</label>
+				<input type="date" class="form-control" id="date" name="date">
+			</div>
+		</div>
+		<div class="form-row">
+			<div class="form-group col-md-3">
+				<label>Rating</label>
+				<div class="clearfix"></div>
+				<fieldset class="rating">
+					<input type="radio" id="rating-5" name="rating" value="5" required {{setChecked 5 review.rating}}>
+					<label for="rating-5" class="rating-star"><i class="fas fa-star"></i></label>
+					<input type="radio" id="rating-4" name="rating" value="4" {{setChecked 4 review.rating}}>
+					<label for="rating-4" class="rating-star"><i class="fas fa-star"></i></label>
+					<input type="radio" id="rating-3" name="rating" value="3" {{setChecked 3 review.rating}}>
+					<label for="rating-3" class="rating-star"><i class="fas fa-star"></i></label>
+					<input type="radio" id="rating-2" name="rating" value="2" {{setChecked 2 review.rating}}>
+					<label for="rating-2" class="rating-star"><i class="fas fa-star"></i></label>
+					<input type="radio" id="rating-1" name="rating" value="1" {{setChecked 1 review.rating}}>
+					<label for="rating-1" class="rating-star"><i class="fas fa-star"></i></label>
+				</fieldset>
+			</div>
+			<div class="form-group col-md-9">
+				<label for="comments">Comments</label>
+				<textarea class="form-control" id="comments" name="comments" rows="5" maxlength="500">{{review.comments}}</textarea>
+			</div>
+		</div>
+		<div class="form-row">
+			<div class="form-group col-12">
+			<button type="submit" class="btn btn-primary">Update review</button>
+			{{#if id}}
+			<button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#confirmDelete">Delete review</button>
+			<!-- Confirm delete modal -->
+			<div class="modal" id="confirmDelete" tabindex="-1" role="dialog" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+			        <h3 class="modal-title" id="deleteModalTitle">Delete review</h3>
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			          <span aria-hidden="true">&times;</span>
+			        </button>
+	      		</div>
+	      		<div class="modal-body">
+	      		Are you sure you want to delete this review?
+	      		</div>
+	      		<div class="modal-footer">
+	      			<button type="button" class="btn btn-danger" onclick="deleteReview({{review.id}}, {{id}})">Delete</button>
+			        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+			      </div>
+			     </div>
+				</div>
+			</div>
+			{{/if}}
+			</div>
+		</div>
+	</form>
+	{{else}}
+	<h1>Add a review for <a href="/beers/{{id}}">{{beer.name}}</a></h1>
 	<form id="reviewForm" action="/beers/{{id}}/reviews" method="post">
 		<div class="form-row">
 			<div class="form-group col-md-6">
@@ -45,8 +116,10 @@
 			</div>
 		</div>
 	</form>
+	{{/if}}
 </div>
 
 <script>
 	document.getElementById('date').valueAsDate = new Date();
 </script>
+<script src="/js/deleteReview.js"></script>

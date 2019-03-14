@@ -41,7 +41,6 @@ function getBeer(req, res, mysql, context, complete) {
       res.end();
     }
     context.beer = results[0];
-    console.log(context.beer);
     complete();
   })
 }
@@ -56,7 +55,6 @@ function getReviewsOfBeer(req, res, mysql, context, complete) {
       res.end();
     }
     context.reviews = results;
-    console.log(context.reviews);
     complete();
   })
 }
@@ -96,7 +94,6 @@ function getUsers(res, mysql, context, complete) {
       res.end();
     }
     context.users = results;
-    console.log(context.users);
     complete();
   })
 }
@@ -111,7 +108,6 @@ function selectReview(req, res, mysql, context, complete) {
       res.end();
     }
     context.review = results[0];
-    console.log(context.review);
     complete();
   });
 }
@@ -293,13 +289,15 @@ router.post('/:id/reviews',function(req,res,next) {
 router.post('/:id/reviews/:rev_id', function(req,res) {
   var mysql = req.app.get('mysql');
   var sql = "UPDATE review SET user_name=?, rev_date=?, rating=?, comments=? WHERE id=?";
+  if(req.body.user == '') {
+    req.body.user = null;
+  }
   var inserts = [req.body.user, req.body.date, req.body.rating, req.body.comments, req.params.rev_id];
   sql = mysql.pool.query(sql,inserts,function(error, results, fields){
       if(error){
         res.write(JSON.stringify(error));
         res.end();
       }else{
-        console.log(inserts);
         res.redirect('/beers/' + req.params.id);
       }
   });

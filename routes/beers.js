@@ -112,6 +112,20 @@ function selectReview(req, res, mysql, context, complete) {
   });
 }
 
+/* Get venues for a beer */
+function getVenues(req, res, mysql, context, complete) {
+  let sql = "SELECT venue.id AS venue_id, venue.name AS venue FROM beer_venue INNER JOIN venue ON venue.id=beer_venue.venue WHERE beer_venue.beer=?";
+  let inserts = [req.params.id];
+  mysql.pool.query(sql, inserts, function(error, results, fields) {
+    if(error) {
+      res.write(JSON.stringify(error));
+      res.end();
+    }
+    context.venues = results;
+    complete();
+  })
+}
+
 /*************************/
 /* ROUTES FOR BEER PAGES */
 /*************************/
@@ -189,9 +203,10 @@ router.get('/:id',function(req,res,next) {
   context.id = req.params.id;
   getBeer(req, res, mysql, context, complete);
   getReviewsOfBeer(req, res, mysql, context, complete);
+  getVenues(req, res, mysql, context, complete);
   function complete() {
     callbackCount++;
-    if(callbackCount >= 2) {
+    if(callbackCount >= 3) {
       res.render('beer', context);
     }
   }

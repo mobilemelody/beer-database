@@ -79,8 +79,9 @@ router.post('/add',function(req,res,next) {
   let inserts = [req.body.username, req.body.email];
   sql = mysql.pool.query(sql, inserts, function(error, results, fields) {
     if(error) {
-      res.write(JSON.stringify(error));
-      res.end();
+      let context = {};
+      context.error = error;
+      res.render('error', context);
     }
     else {
       res.redirect('/users');

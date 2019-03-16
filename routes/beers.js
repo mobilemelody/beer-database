@@ -154,8 +154,9 @@ router.post('/add',function(req,res,next) {
   let inserts = [req.body.name, req.body.brewery, req.body.style, req.body.abv, req.body.ibu];
   sql = mysql.pool.query(sql, inserts, function(error, results, fields) {
     if(error) {
-      res.write(JSON.stringify(error));
-      res.end();
+      let context = {};
+      context.error = error;
+      res.render('error', context);
     }
     else {
       res.redirect('/beers');
@@ -221,8 +222,9 @@ router.post('/:id/edit',function(req,res,next) {
   let inserts = [req.body.name, req.body.brewery, req.body.style, req.body.abv, req.body.ibu, req.params.id];
   sql = mysql.pool.query(sql, inserts, function(error, results, fields) {
     if(error) {
-      res.write(JSON.stringify(error));
-      res.end();
+      let context = {};
+      context.error = error;
+      res.render('error', context);
     }
     else {
       res.redirect('/beers/' + req.params.id);
@@ -276,8 +278,9 @@ router.post('/:id/reviews',function(req,res,next) {
   let inserts = [req.body.user, req.params.id, req.body.date, req.body.rating, req.body.comments];
   sql = mysql.pool.query(sql, inserts, function(error, results, fields) {
     if(error) {
-      res.write(JSON.stringify(error));
-      res.end();
+      let context = {};
+      context.error = error;
+      res.render('error', context);
     }
     else {
       res.redirect('/beers/' + req.params.id);
@@ -295,8 +298,9 @@ router.post('/:id/reviews/:rev_id', function(req,res) {
   var inserts = [req.body.user, req.body.date, req.body.rating, req.body.comments, req.params.rev_id];
   sql = mysql.pool.query(sql,inserts,function(error, results, fields){
       if(error){
-        res.write(JSON.stringify(error));
-        res.end();
+        let context = {};
+        context.error = error;
+        res.render('error', context);
       }else{
         res.redirect('/beers/' + req.params.id);
       }
@@ -310,8 +314,9 @@ router.delete('/:id',function(req,res,next) {
   let inserts = [req.params.id];
   sql = mysql.pool.query(sql, inserts, function(error, results, fields) {
     if(error) {
-      res.write(JSON.stringify(error));
-      res.end();
+      let context = {};
+      context.error = error;
+      res.render('error', context);
     }
     else {
       res.status(202).end();

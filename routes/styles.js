@@ -112,8 +112,9 @@ router.post('/', function(req,res) {
   var inserts = [req.body.name, req.body.description, req.body.abv_range, req.body.ibu_range];
   sql = mysql.pool.query(sql,inserts,function(error, results, fields){
       if(error){
-        res.write(JSON.stringify(error));
-        res.end();
+        let context = {};
+        context.error = error;
+        res.render('error', context);
       }else{
         res.redirect('/styles');
       }
@@ -127,8 +128,9 @@ router.post('/:id', function(req,res) {
   var inserts = [req.body.name, req.body.description, req.body.abv_range, req.body.ibu_range, req.params.id];
   sql = mysql.pool.query(sql,inserts,function(error, results, fields){
       if(error){
-          res.write(JSON.stringify(error));
-          res.end();
+        let context = {};
+        context.error = error;
+        res.render('error', context);
       }else{
           res.redirect('/styles');
       }

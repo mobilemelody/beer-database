@@ -44,8 +44,9 @@ router.delete('/:id',function(req,res,next) {
   var inserts = [req.params.id];
   sql=mysql.pool.query(sql, inserts, function(error, results, fields){
     if(error){
-      res.write(JSON.stringify(error));
-      res.end();
+      let context = {};
+      context.error = error;
+      res.render('error', context);
     } else {
       res.status(202).end();
     }

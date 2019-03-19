@@ -15,7 +15,7 @@
 			</div>
 			<div class="form-group col-md-6">
 				<label for="date">Date</label>
-				<input type="date" class="form-control" id="date" name="date">
+				<input type="date" class="form-control" id="date" name="date" value="{{inputDate review.rev_date}}">
 			</div>
 		</div>
 		<div class="form-row">
@@ -85,7 +85,7 @@
 			</div>
 			<div class="form-group col-md-6">
 				<label for="date">Date</label>
-				<input type="date" class="form-control" id="date" name="date">
+				<input type="date" class="form-control" id="date" name="date" value="{{inputDate review.rev_date}}">
 			</div>
 		</div>
 		<div class="form-row">
@@ -120,6 +120,12 @@
 </div>
 
 <script>
-	document.getElementById('date').valueAsDate = new Date();
+  $(function() {
+  	if (!Modernizr.inputtypes.date) {
+	    $('input[type=date]').datepicker({
+	      dateFormat: 'yy-mm-dd'
+	    });
+	  }
+	});
 </script>
 <script src="/js/deleteReview.js"></script>

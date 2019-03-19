@@ -4,6 +4,7 @@ const express = require('express');
 const mysql = require('./dbcon.js');
 const bodyParser = require('body-parser');
 const moment = require('moment');
+const modernizr = require("modernizr");
 const handlebars = require('express-handlebars').create({
   defaultLayout:'main', 
   helpers: {
@@ -23,6 +24,9 @@ const handlebars = require('express-handlebars').create({
     },
     formatDate: function(value) {
       return moment(value).format("MMM D, YYYY");
+    },
+    inputDate: function(value) {
+      return moment(value).format("YYYY-MM-DD");
     },
     //Found below code at: https://stackoverflow.com/questions/26066768/how-to-set-the-selected-item-in-a-radio-button-group-in-handlebars-template
     //Causes the star radios to return the amount selected based off of the review rating for a beer

@@ -41,7 +41,6 @@ function getBeer(req, res, mysql, context, complete) {
       res.end();
     }
     context.beer = results[0];
-    console.log(context.beer);
     complete();
   })
 }
@@ -56,7 +55,6 @@ function getReviewsOfBeer(req, res, mysql, context, complete) {
       res.end();
     }
     context.reviews = results;
-    console.log(context.reviews);
     complete();
   })
 }
@@ -96,7 +94,6 @@ function getUsers(res, mysql, context, complete) {
       res.end();
     }
     context.users = results;
-    console.log(context.users);
     complete();
   })
 }
@@ -111,9 +108,22 @@ function selectReview(req, res, mysql, context, complete) {
       res.end();
     }
     context.review = results[0];
-    console.log(context.review);
     complete();
   });
+}
+
+/* Get venues for a beer */
+function getVenues(req, res, mysql, context, complete) {
+  let sql = "SELECT venue.id AS venue_id, venue.name AS venue FROM beer_venue INNER JOIN venue ON venue.id=beer_venue.venue WHERE beer_venue.beer=?";
+  let inserts = [req.params.id];
+  mysql.pool.query(sql, inserts, function(error, results, fields) {
+    if(error) {
+      res.write(JSON.stringify(error));
+      res.end();
+    }
+    context.venues = results;
+    complete();
+  })
 }
 
 /*************************/
@@ -158,8 +168,9 @@ router.post('/add',function(req,res,next) {
   let inserts = [req.body.name, req.body.brewery, req.body.style, req.body.abv, req.body.ibu];
   sql = mysql.pool.query(sql, inserts, function(error, results, fields) {
     if(error) {
-      res.write(JSON.stringify(error));
-      res.end();
+      let context = {};
+      context.error = error;
+      res.render('error', context);
     }
     else {
       res.redirect('/beers');
@@ -192,9 +203,10 @@ router.get('/:id',function(req,res,next) {
   context.id = req.params.id;
   getBeer(req, res, mysql, context, complete);
   getReviewsOfBeer(req, res, mysql, context, complete);
+  getVenues(req, res, mysql, context, complete);
   function complete() {
     callbackCount++;
-    if(callbackCount >= 2) {
+    if(callbackCount >= 3) {
       res.render('beer', context);
     }
   }
@@ -225,8 +237,9 @@ router.post('/:id/edit',function(req,res,next) {
   let inserts = [req.body.name, req.body.brewery, req.body.style, req.body.abv, req.body.ibu, req.params.id];
   sql = mysql.pool.query(sql, inserts, function(error, results, fields) {
     if(error) {
-      res.write(JSON.stringify(error));
-      res.end();
+      let context = {};
+      context.error = error;
+      res.render('error', context);
     }
     else {
       res.redirect('/beers/' + req.params.id);
@@ -280,8 +293,9 @@ router.post('/:id/reviews',function(req,res,next) {
   let inserts = [req.body.user, req.params.id, req.body.date, req.body.rating, req.body.comments];
   sql = mysql.pool.query(sql, inserts, function(error, results, fields) {
     if(error) {
-      res.write(JSON.stringify(error));
-      res.end();
+      let context = {};
+      context.error = error;
+      res.render('error', context);
     }
     else {
       res.redirect('/beers/' + req.params.id);
@@ -293,13 +307,16 @@ router.post('/:id/reviews',function(req,res,next) {
 router.post('/:id/reviews/:rev_id', function(req,res) {
   var mysql = req.app.get('mysql');
   var sql = "UPDATE review SET user_name=?, rev_date=?, rating=?, comments=? WHERE id=?";
+  if(req.body.user == '') {
+    req.body.user = null;
+  }
   var inserts = [req.body.user, req.body.date, req.body.rating, req.body.comments, req.params.rev_id];
   sql = mysql.pool.query(sql,inserts,function(error, results, fields){
       if(error){
-        res.write(JSON.stringify(error));
-        res.end();
+        let context = {};
+        context.error = error;
+        res.render('error', context);
       }else{
-        console.log(inserts);
         res.redirect('/beers/' + req.params.id);
       }
   });
@@ -312,8 +329,9 @@ router.delete('/:id',function(req,res,next) {
   let inserts = [req.params.id];
   sql = mysql.pool.query(sql, inserts, function(error, results, fields) {
     if(error) {
-      res.write(JSON.stringify(error));
-      res.end();
+      let context = {};
+      context.error = error;
+      res.render('error', context);
     }
     else {
       res.status(202).end();

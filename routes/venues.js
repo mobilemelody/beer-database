@@ -178,9 +178,10 @@ router.post('/add',function(req,res,next) {
   let inserts = [req.body.name, req.body.address, req.body.city, req.body.state];
   sql = mysql.pool.query(sql, inserts, function(error, results, fields) {
     if(error) {
-      res.write(JSON.stringify(error));
-      res.end(); }
-    else {
+      let context = {};
+      context.error = error;
+      res.render('error', context);
+    } else {
       res.redirect('/venues'); }
   });
 });
@@ -255,10 +256,12 @@ router.post('/:id/edit',function(req,res,next) {
   let inserts = [req.body.name, req.body.address, req.body.city, req.body.state, req.params.id];
   sql = mysql.pool.query(sql, inserts, function(error, results, fields) {
     if(error) {
-      res.write(JSON.stringify(error));
-      res.end(); }
-    else {
-      res.redirect('/venues/' + req.params.id); }
+      let context = {};
+      context.error = error;
+      res.render('error', context); 
+    } else {
+      res.redirect('/venues/' + req.params.id); 
+    }
   });
 });
 
@@ -269,10 +272,12 @@ router.post('/:id/taplist/add',function(req,res,next) {
   let inserts = [req.body.beer, req.params.id];
   sql = mysql.pool.query(sql, inserts, function(error, results, fields) {
     if(error) {
-      res.write(JSON.stringify(error));
-      res.end(); }
-    else {
-      res.redirect('/venues/' + req.params.id); }
+      let context = {};
+      context.error = error;
+      res.render('error', context); 
+    } else {
+      res.redirect('/venues/' + req.params.id); 
+    }
   });
 });
 
@@ -283,10 +288,12 @@ router.delete('/:id/tap/:beer',function(req,res,next) {
   let inserts = [req.params.id, req.params.beer];
   sql = mysql.pool.query(sql, inserts, function(error, results, fields) {
     if(error) {
-      res.write(JSON.stringify(error));
-      res.end(); }
-    else {
-      res.status(202).end(); }
+      let context = {};
+      context.error = error;
+      res.render('error', context); 
+    } else {
+      res.status(202).end(); 
+    }
   });
 });
 
@@ -297,10 +304,12 @@ router.delete('/:id',function(req,res,next) {
   let inserts = [req.params.id];
   sql = mysql.pool.query(sql, inserts, function(error, results, fields) {
     if(error) {
-      res.write(JSON.stringify(error));
-      res.end(); }
-    else {
-      res.status(202).end(); }
+      let context = {};
+      context.error = error;
+      res.render('error', context);
+    } else {
+      res.status(202).end(); 
+    }
   });
 });
 

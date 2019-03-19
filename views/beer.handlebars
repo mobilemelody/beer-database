@@ -22,24 +22,36 @@
 			<div class="ibu">IBU: {{beer.ibu}}</div>
 		</div>
 	</div>
-	<div class="rating-info py-3">
-		<div class="beer-rating"><i class="fas fa-star rating-star"></i> {{decimal beer.avg_rating}}</div>
-		<div class="text-muted"><small>{{beer.num_reviews}} reviews</small></div>
-	</div>
-	<h2>Reviews</h2>
-		{{#each reviews}}
-		<div class="review py-3 border-top">
-			<div class="review-info row">
-				<div class="col-9">
-					<div class="review-user text-bold">{{#if user_id}}<a href="/users/{{user_id}}">{{user_name}}</a>{{else}}Anonymous{{/if}}</div>
-					<div class="review-date text-muted"><small>{{formatDate rev_date}}</small></div>
-				</div>
-				<div class="user-rating col-3 text-right"><i class="fas fa-star rating-star"></i> {{decimal rating}}</div>
+	<div class="row">
+		<div class="col-md-9">
+			<div class="rating-info py-3">
+				<div class="beer-rating"><i class="fas fa-star rating-star"></i> {{decimal beer.avg_rating}}</div>
+				<div class="text-muted"><small>{{beer.num_reviews}} reviews</small></div>
 			</div>
-			<div class="user-comments">{{comments}}</div>
-			<a href="/beers/{{../beer.id}}/reviews/{{rev_id}}/edit" class="btn btn-primary"><i class="fas fa-star"></i> Edit review</a>
+			<h2>Reviews</h2>
+			{{#each reviews}}
+			<div class="review py-3 border-top">
+				<div class="review-info row">
+					<div class="col-9">
+						<div class="review-user text-bold">{{#if user_id}}<a href="/users/{{user_id}}">{{user_name}}</a>{{else}}Anonymous{{/if}}</div>
+						<div class="review-date text-muted"><small>{{formatDate rev_date}}</small></div>
+					</div>
+					<div class="user-rating col-3 text-right"><i class="fas fa-star rating-star"></i> {{decimal rating}}</div>
+				</div>
+				<div class="user-comments">{{comments}}</div>
+				<div class="pt-3"><a href="/beers/{{../beer.id}}/reviews/{{rev_id}}/edit" class="btn btn-outline-secondary btn-sm"><i class="fas fa-edit"></i> Edit</a></div>
+			</div>
+			{{/each}}
 		</div>
-		{{/each}}
+		<div class="col-md-3 pt-3">
+			<h3>Venues</h3>
+			<div class="list-group">
+				{{#each venues}}
+				<a href="/venues/{{venue_id}}" class="list-group-item list-group-item-action">{{venue}}</a>
+				{{/each}}
+			</div>
+		</div>
+	</div>
 </div>
 
 {{else if q}}

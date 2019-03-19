@@ -51,8 +51,9 @@ CREATE TABLE beer (
     abv FLOAT,
     ibu INTEGER,
     PRIMARY KEY (id),
-    FOREIGN KEY (brewery) REFERENCES brewery (id) ON DELETE CASCADE,                   /*Review specific needs for each entitiy*/
-    FOREIGN KEY (style) REFERENCES style (id) ON DELETE CASCADE                   /*Review specific needs for each entitiy*/
+    FOREIGN KEY (brewery) REFERENCES brewery (id) ON DELETE CASCADE,
+    FOREIGN KEY (style) REFERENCES style (id) ON DELETE CASCADE,
+    CONSTRAINT beer_brewery UNIQUE (name, brewery)
 );
 
 /*CREATE VENUE TABLE*/
@@ -76,7 +77,7 @@ CREATE TABLE db_user (
 /*CREATE REVIEW TABLE*/
 CREATE TABLE review (
     id INTEGER AUTO_INCREMENT,
-    user_name INTEGER,
+    user_name INTEGER NULL,
     beer INTEGER NOT NULL,
     rev_date DATE,
     rating INTEGER NOT NULL,

@@ -75,6 +75,12 @@ INNER JOIN beer ON review.beer=beer.id
 LEFT JOIN db_user ON review.user_name=db_user.id
 WHERE review.id=:idInput
 
+-- Select all venues that have a given beer
+SELECT venue.id AS venue_id, venue.name AS venue
+FROM beer_venue
+INNER JOIN venue ON venue.id=beer_venue.venue
+WHERE beer_venue.beer=:idInput
+
 -- Select all users sorted alphabetically for dropdown in reviews form
 SELECT id, user_name FROM db_user ORDER BY user_name ASC
 

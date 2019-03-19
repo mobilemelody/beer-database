@@ -131,12 +131,13 @@ router.post('/', function(req,res) {
   var sql = "INSERT INTO brewery (name, country, city, state) VALUES (?,?,?,?)";
   var inserts = [req.body.breweryName, req.body.country, req.body.city, req.body.state];
   sql = mysql.pool.query(sql,inserts,function(error, results, fields){
-      if(error){
-        res.write(JSON.stringify(error));
-        res.end();
-      }else{
-        res.redirect('/breweries');
-      }
+    if(error){
+      let context = {};
+      context.error = error;
+      res.render('error', context);
+    } else{
+      res.redirect('/breweries');
+    }
   });
 });
 
@@ -146,12 +147,13 @@ router.post('/:id', function(req,res) {
   var sql = "UPDATE brewery SET name=?, country=?, city=?, state=? WHERE id=?";
   var inserts = [req.body.breweryName, req.body.country, req.body.city, req.body.state, req.params.id];
   sql = mysql.pool.query(sql,inserts,function(error, results, fields){
-      if(error){
-          res.write(JSON.stringify(error));
-          res.end();
-      }else{
-          res.redirect('/breweries');
-      }
+    if(error){
+      let context = {};
+      context.error = error;
+      res.render('error', context);
+    } else{
+      res.redirect('/breweries');
+    }
   });
 });
 

@@ -34,7 +34,7 @@ function getUser(req, res, mysql, context, complete) {
 
 /* Get all reviews for user */
 function getUserReviews(req, res, mysql, context, complete) {
-  let sql = "SELECT beer.id AS beer_id, beer.name AS beer_name, review.rev_date AS rev_date, review.rating AS rating, review.comments AS comments FROM review INNER JOIN beer ON review.beer=beer.id WHERE review.user_name=? ORDER BY rev_date DESC";
+  let sql = "SELECT beer.id AS beer_id, beer.name AS beer_name, review.id AS rev_id, review.rev_date AS rev_date, review.rating AS rating, review.comments AS comments FROM review INNER JOIN beer ON review.beer=beer.id WHERE review.user_name=? ORDER BY rev_date DESC";
   let inserts = [req.params.id];
   mysql.pool.query(sql, inserts, function(error, results, fields) {
     if(error) {

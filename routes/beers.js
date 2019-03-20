@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const moment = require('moment');
 
 /**************************/
 /* QUERIES FOR BEER PAGES */
@@ -254,6 +255,8 @@ router.get('/:id/reviews/add',function(req,res,next) {
   let mysql = req.app.get('mysql');
   context.beer_active = true;
   context.id = req.params.id;
+  context.review = {};
+  context.review.rev_date = moment().format("YYYY-MM-DD");
   getBeer(req, res, mysql, context, complete);
   getUsers(res, mysql, context, complete);
   function complete() {
